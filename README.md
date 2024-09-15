@@ -55,14 +55,9 @@ space show.
 # Avancement         
 
 Je suis à:    
-    -> J'arrive... je télécharge le projet, et bien mon projet à moi    
-    -> Ecole et Maison faire le lien avec les repository en local   
-	-> **ATTENTION** Prevoir les git push en avance, car cela va être compliqué...
-	-> Quand je saurais comment je fais les git pull je l'écrirai en synthèse    
-	-> **ATTENTION** à bien commit en 4 fois -> Commit local -> copier dans le vrai -> Git add -> Git commit -> Git push
-	-> **ATTENTION** Pour les pull je ne sais pas trop comment je vais faire... je vais peut-être devoir    
-	     retélécharger à chaque fois... ou juste les "git pull" fonctionneront et pas les git push.     
-		Cela me semble possible.    
+    -> Ecole je pull mon projet + ma classe ajoutée    
+	-> Ne pas oublier d'installer en clic droit > Metacello    
+	-> Rappel erreur : Il faut cliquer sur "Store Settings"    
 
 Tutoriel Pharo disponible à     
 https://mooc.pharo.org/    
