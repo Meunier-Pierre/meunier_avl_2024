@@ -50,15 +50,18 @@ space show.
 
 Tutoriel Pharo disponible à     
 https://mooc.pharo.org/    
-**Je suis à:** W1 video, puis Week2 ou3... A voir, le professeur semblait dire que l'on    
-pouvait directement passer en week3.       
-Ma synthèse Pharo est à la racine du projet    
+**Je suis à:** 
+   -> J'ai fais toute Week1
+   -> Week2 j'ai juste vu comment parcourir classe
+   -> Regarder Week5, le pdf6 qui montre comment faire les tests unitaires
+   - J'ai sauté pas mal suite à ce que le professeur demande...
 
-1- Suivre tutoriel / Synthèse, créer une classe juste     
-2 - Faire un Pharo > Save    
-3- Exporter sur git, et verifier si pris en compte    
-4- Créer 1/2 test unitaire    
-5- git push mes tests unitaires   
+Ma synthèse Pharo est à la racine du projet    
+  
+1- Créer 1 test unitaire
+2 - exporter + git push
+3- verifier si cela est pris en compte    
+5- écrire en README comment faire
 
 **Après:** suivre le sujet de TP   
 
