@@ -54,7 +54,7 @@ space show.
 
 # Avancement         
 
-Je suis à:
+Je suis à:    
     -> J'arrive... je télécharge le projet, et bien mon projet à moi    
     -> Ecole et Maison faire le lien avec les repository en local   
 	-> **ATTENTION** Prevoir les git push en avance, car cela va être compliqué...
@@ -66,13 +66,13 @@ Je suis à:
 
 Tutoriel Pharo disponible à     
 https://mooc.pharo.org/    
-**Marque page MOOC:** 
-   -> J'ai fais toute Week1
-   -> Week2 j'ai juste vu comment parcourir classe
-   -> Regarder Week5, le pdf6 qui montre comment faire les tests unitaires
-   - J'ai sauté pas mal suite à ce que le professeur demande...
+**Marque page MOOC:**     
+   -> J'ai fais toute Week1    
+   -> Week2 j'ai juste vu comment parcourir classe    
+   -> Regarder Week5, le pdf6 qui montre comment faire les tests unitaires    
+   - J'ai sauté pas mal suite à ce que le professeur demande...    
 
-Ma synthèse Pharo est à la racine du projet    
+Ma synthèse Pharo est à la racine du projet      
   
  
 
