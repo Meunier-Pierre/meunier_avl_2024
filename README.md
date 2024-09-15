@@ -70,7 +70,7 @@ https://mooc.pharo.org/
    -> J'ai fais toute Week1    
    -> Week2 j'ai juste vu comment parcourir classe    
    -> Regarder Week5, le pdf6 qui montre comment faire les tests unitaires    
-   - J'ai sauté pas mal suite à ce que le professeur demande...    
+   -> J'ai sauté pas mal suite à ce que le professeur demande...    
 
 Ma synthèse Pharo est à la racine du projet      
   
