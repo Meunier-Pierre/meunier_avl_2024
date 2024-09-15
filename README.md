@@ -14,6 +14,7 @@ Le sujet de ce TP est disponible à
 [TP.md](./TP.md)   
 
 
+
 # Import du projet     
 
 Pour importer le projet de l'étudiant, après avoir ouvert  une image Pharo 12.0 il faudra ouvrir le    
@@ -52,25 +53,25 @@ Pour exporter le projet, il faut
 
 **TO DO**
 
-# Avancement         
+# Synthese Pharo   
 
--> Faire un compte GitHub pour que le professeur puisse voir mon TP    
+Ma synthese Pharo est disponible à **Synthese.doc**     
+
+
+# Avancement         
 
 Tutoriel Pharo disponible à     
 https://mooc.pharo.org/    
+Je suis à: W1-S04-PharoModelInANutshell
 
-Pour les vidéos cliquer sur "Subtitles" en cours, son non disponible.   
- 
-**Je suis à :**       
-W1-S04-PharoModelInANutshell    
+1- Suivre tutoriel / Synthèse, créer une classe juste     
+2 - Faire un Pharo > Save    
+3- Exporter sur git, et verifier si pris en compte    
+4- Créer 1/2 test unitaire    
+5- git push mes tests unitaires   
 
-Ma synthese Pharo est disponible à **Synthese.doc**      
+Après: suivre le sujet de TP   
 
-
-# Sujet de TP      
-
-Le projet à debuguer sera https://github.com/UnivLille-Meta/Chess       
-
-
-**TO DO:** A ecrire
+     
+   
 
