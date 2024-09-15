@@ -46,23 +46,13 @@ space resizable: true.
 space show.
 ```
 
-# Export du projet    
-
-ATTENTION penser à faire Pharo > Save à chaque fois.     
-Pour exporter le projet, il faut
-
-**TO DO**
-
-# Synthese Pharo   
-
-Ma synthese Pharo est disponible à **Synthese.doc**     
-
-
 # Avancement         
 
 Tutoriel Pharo disponible à     
 https://mooc.pharo.org/    
-Je suis à: W1-S04-PharoModelInANutshell
+**Je suis à:** W1 video, puis Week2 ou3... A voir, le professeur semblait dire que l'on    
+pouvait directement passer en week3.       
+Ma synthèse Pharo est à la racine du projet    
 
 1- Suivre tutoriel / Synthèse, créer une classe juste     
 2 - Faire un Pharo > Save    
@@ -70,7 +60,15 @@ Je suis à: W1-S04-PharoModelInANutshell
 4- Créer 1/2 test unitaire    
 5- git push mes tests unitaires   
 
-Après: suivre le sujet de TP   
+**Après:** suivre le sujet de TP   
+
+
+# Export du projet    
+
+ATTENTION penser à faire Pharo > Save à chaque fois.     
+Pour exporter le projet, il faut
+
+**TO DO**  
 
      
    
