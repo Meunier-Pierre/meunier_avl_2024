@@ -122,7 +122,7 @@ Synthese MOOC https://mooc.pharo.org/ faire jusqu'a week3 avec video + redo + bo
 			    Idee > FEN test on voit comment on ecrit. Et voir appeller MyChessBoard >> initializeFromFENBoard
 				   ET TESTER EN PLAYGROUND
 2. Programmer le Kata + garder en tête la question 2 du Kata
-2. Repondre a la question 2 du Kata
+2. Repondre a la question 2 du Kata dans la partie du md "Reponse au Kata"
 	
 
 Liste des Bugs:
