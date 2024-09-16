@@ -54,10 +54,34 @@ space show.
 
 # Avancement         
 
+**Attention appris prof:**
+   -> On doit se concentrer sur UN SEUL Kata en fait 
+   -> Ont doit faire test
+   -> Ont peut faire plus en réparant le bug
+   -> On peut faire plus en refactorant  
+
+**Je pense:**
+    -> Chaque seance voir un peu ce qui est marqué en "pratique" en plus de la synthèse. Mais 
+	synthèse de base plus importante.
+
 Je suis à:    
-    -> Ecole je pull mon projet + ma classe ajoutée    
-	-> Ne pas oublier d'installer en clic droit > Metacello    
-	-> Rappel erreur : Il faut cliquer sur "Store Settings"    
+    -> Kata choisit: Restrict Legal Move car il semble intéressant
+	-> 1- Programmer
+	- > 2 - Tester
+
+	
+    
+    -> Je me suis trompé pour le bug du pion donc... voir à recoder.
+	    Mouvement pion réexpliquer dans le sujet.  
+
+Liste des bugs trouvés:    
+     - Les pions devraient pouvoir avancer de 2 cases au debut     
+	 - Les pions ne mangent pas en diagonale actuellement et devrait pouvoir le faire    
+	 - Les pion actuellement peuvent manger vers l'avant ce qui devrait etre interdit
+
+Liste des bugs trouvés hors de mon Kata:    
+     - Si le roi est tué l'on recoit a chaque fois que l'on appuye sur "Play" un "NotFound : [p: | p isKing] notfound in Array".   
+	      Le roi est la seule pièce concerné. Et uniquement si l'on appuie sur le bouton play, et non si on fait cela à la main.   
 
 Tutoriel Pharo disponible à     
 https://mooc.pharo.org/    
