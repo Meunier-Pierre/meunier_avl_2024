@@ -7,11 +7,41 @@ MEUNIER Pierre
 M2 Genie Logiciel     
 Année 2024-2025     
 
+# Avancement  
+
+**ATTENTION:**    
+    - toujours mettre des tags (voir tp.md)    
+	- Ne pas répondre aux questions d'aide du kata mais à celle dans tp.md     
+	- Ne pas écrire les réponses dans un fichier question.md mais avec le nom donné dans tp.md     
+
+**Je suis à:**    
+
+- Faire les "Practise" a chaque cours + les mettres dans ma synthese ou un autre Fichier,   
+     je ne sais pas... Ou Juste séparer par les "practise".      
+
+- Kata choisit: Restrict Legal Move car il semble intéressant    
+- Je dirais ne PLUS faire de Mooc     
+- Voir le fichier suivant pour voir ce que je suis en train de faire                              
+[Tache.md](./Tache.md)     
+
+**Au besoin:**
+    MOOC https://mooc.pharo.org/  j'ai fait la week1, mais d'après ma synthèse je pense que
+	    cela comprend week1 et week2
+
 # Sujet    
 
-Le sujet de ce TP est disponible à    
+Le sujet de ce TP est disponible en 2 endroits.     
+L'un est les katas   
 
-[TP.md](./TP.md)   
+[begin.md](./begin.md)   
+
+L'autre est le sujet de TP   
+
+https://github.com/avl-univ-lille/testing/blob/2024/tp.md   
+
+Et l'agenda de la note, et les TAG à écrire sont notés à    
+
+https://github.com/avl-univ-lille/testing/blob/2024/agenda.md    
 
 
 
@@ -28,8 +58,8 @@ Metacello new
 	load.
 ```
 
-La commande ci dessus a bien été modifiée pour pointé vers le projet de l'étudiant, comme cela est visible d'après     
-le nom du projet git "Meunier-Pierre/..."      
+La commande ci dessus a bien été modifiée pour pointé vers le projet de l'étudiant, comme cela est visible    
+d'après le nom du projet git "Meunier-Pierre/..."      
 
 
 # Export du projet étudiant   
@@ -94,47 +124,6 @@ Dans Browse > System Browser j'ai utilisé les outils suivants pour trouver l'en
 **TO DO**     
 
 
-# Avancement         
-
-**Attention appris prof:**
-   -> On doit se concentrer sur UN SEUL Kata en fait 
-   -> J'ai vérifié professeur par question, on fait les test QUE sur mon Kata.
-   -> Vérifié professeur, on doit faire des tests sur notre Kata MEME si non écrit
-
-**Je pense:**
-    -> Chaque seance voir un peu ce qui est marqué en "pratique" en plus de la synthèse. Mais 
-	synthèse de base plus importante.
-
-**Je suis à:**    
-    
-
-Kata choisit: Restrict Legal Move car il semble intéressant    
-
-
-Synthese MOOC https://mooc.pharo.org/ faire jusqu'a week3 avec video + redo + bonne synthese    
-        actuel MOOC: Video, et redo du week1    
-
-0.  Supprimer/Modifier le test sur les mouvements de pion car mauvais mouvement mis + ne fait pas partis de mon Kata
-0.bis  Synthese avancer
-1.  Plusieurs Tests unitaires sur le Kata. J'ai vérifié avec professeur ne faire les tests QUE sur mon Kata.
-	1.1 - Penser les tests en francais
-	1.2 - Les ecrires. Petite difficulté comment -->
-			    Idee > FEN test on voit comment on ecrit. Et voir appeller MyChessBoard >> initializeFromFENBoard
-				   ET TESTER EN PLAYGROUND
-2. Programmer le Kata + garder en tête la question 2 du Kata
-2. Repondre a la question 2 du Kata dans la partie du md "Reponse au Kata"
-	
-
-Liste des Bugs:
-	Le pion devrait pouvoir bouger de 2 case au debut
-	Le pion devrait pouvoir manger en diagonale
-	Le pion ne devrait pas pouvoir manger vers l'avant, hors actuellement il le peut
-	Si le roi est mangé et que l'on clique sur Play (n'arrive pas si on le fait à la main) , une Exception est levée
-  
-  
-
-Ma synthèse Pharo est à la racine du projet      
-  
  
 
 
