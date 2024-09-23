@@ -11,16 +11,16 @@ Année 2024-2025
 
 **ATTENTION:**    
     - toujours mettre des tags (voir tp.md)    
+	- Faire les practises
 	- Ne pas répondre aux questions d'aide du kata mais à celle dans tp.md     
 	- Ne pas écrire les réponses dans un fichier question.md mais avec le nom donné dans tp.md     
 
 **Je suis à:**    
 
-- Faire les "Practise" a chaque cours + les mettres dans ma synthese ou un autre Fichier,   
-     je ne sais pas... Ou Juste séparer par les "practise".      
+- Faire les "Practise" a chaque cours + les mettres dans ma synthese, avec des titres spéciaux. Ils seront peut-être utiles en DS.       
 
 - Kata choisit: Restrict Legal Move car il semble intéressant    
-- Je dirais ne PLUS faire de Mooc     
+- Je dirais ne PLUS faire de Mooc car j'ai fait equivalent week1 / week2 je pense       
 - Voir le fichier suivant pour voir ce que je suis en train de faire                              
 [Tache.md](./Tache.md)     
 
