@@ -12,6 +12,20 @@ MyRookTests >> testId [
 ]
 
 { #category : 'tests' }
+MyRookTests >> testIfCheckCanMoveToEatAttacker [
+
+	| whiteRook squares board |
+	board := MyChessBoard empty.
+	board at: 'd5' put: (whiteRook := MyRook white).
+	board at: 'a1' put: (MyKing white).
+	board at: 'c2' put: (MyQueen black).
+	board at: 'd1' put: (MyRook black).
+
+	squares := whiteRook legalTargetSquares.
+	self assert: ( squares includes: (board at: 'd1')).
+]
+
+{ #category : 'tests' }
 MyRookTests >> testMoves [
 
 	| rook squares board |
@@ -64,4 +78,18 @@ MyRookTests >> testMovesWithSameColorObstacle [
 		includesAll:
 			(#( e5 e6 e7 e8 d4 c4 b4 a4 f4 e3 e2 e1 ) collect: [ :name |
 				 board at: name ])
+]
+
+{ #category : 'tests' }
+MyRookTests >> testNoMovesWhenCheckmate [
+
+	| whiteRook squares board |
+	board := MyChessBoard empty.
+	board at: 'e1' put: (whiteRook := MyRook white).
+	board at: 'a1' put: (MyKing white).
+	board at: 'a3' put: (MyQueen black).
+	board at: 'b3' put: (MyRook black).
+
+	squares := whiteRook legalTargetSquares.
+	self assert: ( squares size) equals: 0
 ]
