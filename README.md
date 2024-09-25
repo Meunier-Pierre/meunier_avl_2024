@@ -31,8 +31,8 @@ Les réponses du TP1 sont écrits dans le fichier
 # Avancement  
 
 **ATTENTION:**    
-    - toujours mettre des tags (voir tp.md)    
-	- Faire les practises
+    - toujours mettre des tags (voir tp.md)     
+	- Faire les practises    
 	- Ne pas répondre aux questions d'aide du kata mais à celle dans tp.md     
 	- Ne pas écrire les réponses dans un fichier question.md mais avec le nom donné dans tp.md     
 
@@ -46,8 +46,8 @@ Les réponses du TP1 sont écrits dans le fichier
 [Tache.md](./Tache.md)     
 
 **Au besoin:**
-    MOOC https://mooc.pharo.org/  j'ai fait la week1, mais d'après ma synthèse je pense que
-	    cela comprend week1 et week2
+    MOOC https://mooc.pharo.org/  j'ai fait la week1, mais d'après ma synthèse je pense que         
+	    cela comprend week1 et week2        
 
 
 
