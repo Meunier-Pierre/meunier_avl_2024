@@ -72,7 +72,8 @@ MyRookTests >> testNoMovesWhenCheckmate
 
 En regardant les tests, l'on se rend compte que le jeu présente les bugs suivants:    
 1. Lorsque le roi est en echec, ses mouvements deviennent restreints...  Mais il y a quelques    
-soucis avec l'algorithme utilisé.    
+soucis avec l'algorithme utilisé. Par exemple l'algorithme empeche le roi de manger quelqu'un.    
+J'ai vérifié que cela était dans tous les cas à la main.     
 2. Les pièces autres que le roi n'ont aucun mouvement restreint lorsque le roi est en echec,    
 ou echec et mat. Hors cela devrait être le cas.     
 
@@ -80,7 +81,28 @@ ou echec et mat. Hors cela devrait être le cas.
 
 Les modifications que j'ai faites pour résoudre les bugs sont les suivantes:    
 
-- **MyKing >> targetSquaresLegal (Protocol Rendering):** Recodage pour dire de renvoyer directement     
+- **MyKing >> targetSquaresLegal (Protocol Rendering):** 
+Le roi ne pouvais pas manger car il y avait le code suivant
+```
+"Let's hope the piece is not defended"
+threatenedSquares includes: s  
+```
+
+que j'ai remplacé par le code suivant, qui respectait enfin le commentaire.
+
+```
+"Let's hope the piece is not defended"
+(threatenedSquares includes: s) not 
+```
+
+- Ajout des méthodes **MyPiece >> MyKing (Accessing)** et **MyPiece >> MyKingAttacker**:
+afin de pouvoir aider à factoriser par la suite.
+
+**WARNING: Ce qui a provoqué le crash la derniere fois est qu'il me faudra une methode "acces aux cases
+sans restrictions roi" pour les oponnents... + l'utiliser dans la determination de l'attacker aussi**
+
+
+Recodage pour dire de renvoyer directement     
 basicTargetSquares dès lors que la case n'est pas nil, sauf si elle contient une pièce de notre    
 couleur. Cela était la fonction qui implémentait une restriction de mouvement en cas d'echec, pour     
 le roi, mais avec un bug. J'ai enlevé la restriction de mouvement pour le roi, en fonction des échecs.         
@@ -96,6 +118,10 @@ checkForMat est dans MyChessGame et non PAS My Chess Board
 faire g := self board game
 puis g checkForMate
 
+Si noir
+^ self board game blackPlayer pieces detect: [ :p | p isKing ]
+Sinon
+^ self board game whitePlayer pieces detect: [ :p | p isKing ]
 ----------
 
 MINCE la fonction My Piece >> legalTargetSquares (Protocol path commands) gére l'impossibilité physique mais PAS
