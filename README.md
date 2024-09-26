@@ -42,12 +42,9 @@ Les réponses du TP1 sont écrits dans le fichier
 
 - Faire le Kata (relire Kata) + Faire le fichier Task1.md avec les réponses attendues   
 - Je dirais ne PLUS faire de Mooc car j'ai fait equivalent week1 / week2 je pense       
-- Voir le fichier suivant pour voir ce que je suis en train de faire                              
-[Tache.md](./Tache.md)     
 
 **Au besoin:**
-    MOOC https://mooc.pharo.org/  j'ai fait la week1, mais d'après ma synthèse je pense que         
-	    cela comprend week1 et week2        
+    MOOC https://mooc.pharo.org/     
 
 
 
