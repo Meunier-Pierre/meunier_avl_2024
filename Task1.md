@@ -106,7 +106,7 @@ que j'ai remplacé par le code pharo suivant, en suivant le commentaire.
 ```
 
 - Ajout des méthodes **MyPiece >> MyKing (Accessing)** et **MyPiece >> MyKingAttacker (Accessing)**.    
-Méthodes utiliser après par ma nouvelle fonction.    
+Méthodes utilisées après par ma nouvelle fonction.    
 
 - **MyPiece >> legalTargetSquares (path commands):**    
 
