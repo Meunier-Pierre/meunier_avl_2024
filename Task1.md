@@ -81,10 +81,9 @@ ou echec et mat. Hors cela devrait être le cas.
 
 J'ai commencé à faire des modifications dans le code pour résoudre les bugs détectés.    
 Mon idée de départ, était lorsque l'on demandait les mouvements, de tester chaque coup valide sur     
-des echequiers copies, puis de voir si l'on est en echec après le coup.    
+des echequiers copies, puis de voir si l'on est en echec après le coup. Mais cela provoquait la     
+boucle infinie suivante        
 
-Une idée simple, qui est en fait insoluble.    
-Avec cette idée l'on a la boucle infinie suivante.     
 legalTargetSquares >> appel isInCheck >> appel legalTargetSquares >> appel isInCheck....    
 
 J'ai donc codé seulement les modifications d'après.    
@@ -106,17 +105,14 @@ que j'ai remplacé par le code pharo suivant, en suivant le commentaire.
 (threatenedSquares includes: s) not 
 ```
 
-- Ajout des méthodes **MyPiece >> MyKing (Accessing)** et **MyPiece >> MyKingAttacker (Accessing)**. 
-Ces méthodes sont des méthodes utiles pour la fonction d'après. Et elle ont été codées pour simplifier    
-son écriture.    
+- Ajout des méthodes **MyPiece >> MyKing (Accessing)** et **MyPiece >> MyKingAttacker (Accessing)**.    
+Méthodes utiliser après par ma nouvelle fonction.    
 
 - **MyPiece >> legalTargetSquares (path commands):**    
 
-Les pièces pouvait se déplacer librement, même en cas d'echec du roi.    
-J'ai décidé de rester simple, et en cas d'echec de ne plus permettre à la pièce de se déplacer, sauf   
-pour manger une pièce attaquant le roi.   
-
-J'ai donc remplacé ce code
+Les pièces pouvait se déplacer librement, même en cas d'echec du roi. J'ai décidé en cas d'echec de ne      
+plus permettre à la pièce de se déplacer, sauf pour manger une pièce attaquant le roi. J'ai remplacé le     
+code     
 
 ```
 legalTargetSquares
