@@ -28,25 +28,9 @@ Les réponses du TP1 sont écrits dans le fichier
 [Task1.md](./Task1.md)  
 
 
-# Avancement  
+# Avancement    
 
-**ATTENTION:**    
-    - toujours mettre des tags (voir tp.md)     
-	- Faire les practises    
-	- Ne pas répondre aux questions d'aide du kata mais à celle dans tp.md     
-	- Ne pas écrire les réponses dans un fichier question.md mais avec le nom donné dans tp.md     
-
-**Je suis à:**    
-
-- Faire les "Practise" a chaque cours   
-
-- Faire le Kata (relire Kata) + Faire le fichier Task1.md avec les réponses attendues   
-- Je dirais ne PLUS faire de Mooc car j'ai fait equivalent week1 / week2 je pense       
-
-**Au besoin:**
-    MOOC https://mooc.pharo.org/     
-
-
+Task1 finie.    
 
 # Import du projet     
 
@@ -98,6 +82,11 @@ But you can do it.
 Questions and ideas that can help you in the process:
 - What tools help you finding the right place to put this new code?
 - How do you avoid repeating all the existing code computing legal moves and checks?
+
+# Note Etudiant a Moi Meme   
+
+Mettre les tags, faire les practises, écrire les réponses dans Task1.md, Task2.md... Ne pas aller plus loin    
+au MOOC, car j'ai déjà vu pas mal de Syntaxe. Et le TP est long.   
  
 
 
