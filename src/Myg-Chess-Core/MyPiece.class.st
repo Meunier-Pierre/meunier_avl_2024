@@ -158,7 +158,23 @@ MyPiece >> leftFileLegal: aBoolean [
 { #category : 'path commands' }
 MyPiece >> legalTargetSquares [
 
-	^ self targetSquaresLegal: true
+   |list attacker attackerSquare result|.
+   list := self targetSquaresLegal: true.
+
+   (self isKing) ifTrue:[
+	   ^ list.
+	] ifFalse:[
+		 attacker := self myKingAttacker.
+		 attacker isNil ifTrue:[^ list].
+       
+       result := OrderedCollection new.
+	    attackerSquare := attacker square.
+	    result add: attackerSquare.
+	    (list includes: attackerSquare) ifTrue: [ ^ result] 
+	                                    ifFalse: [ ^ #() ].
+	].
+
+	
 ]
 
 { #category : 'path commands' }
@@ -169,6 +185,51 @@ MyPiece >> moveTo: aSquare [
 	square emptyContents.
 	square := aSquare.
 	aSquare contents: self
+]
+
+{ #category : 'accessing' }
+MyPiece >> myKing [
+	"Return the King of the same color than me or nil"
+	
+	|result|.
+	self isKing ifTrue: [ ^ self ].
+	
+	result := OrderedCollection new.
+	
+	self board pieces do: [ :p |  
+	  ((p isNotNil and: [p isKing]) and: [p color = self color]) ifTrue: [  
+			result add: p.
+		].
+	].
+
+	result isEmpty ifTrue: [^ nil.]
+       ifFalse: [ ^ result at: 1.].
+	
+
+	
+]
+
+{ #category : 'accessing' }
+MyPiece >> myKingAttacker [
+	"Return the piece than put my King to check, or null"
+
+	| king foes attackedSquaresSimplified |
+	
+	king := self isKing ifTrue: [ self ]
+		                  ifFalse: [ self myKing ].
+
+	king ifNil: [ ^ nil ].
+	foes := king opponentPieces.
+
+	foes do: [ :foe |
+		"I have simplified the attacked Square... or the tests crash because too much recursives calls"
+		attackedSquaresSimplified := foe isKing ifTrue: [foe basicTargetSquares select: [ :s | s notNil ]]
+			                            ifFalse: [foe targetSquaresLegal: true ].
+
+		(attackedSquaresSimplified includes: king square) ifTrue: [ ^ foe ] 
+	].
+
+	^ nil.
 ]
 
 { #category : 'rendering' }
