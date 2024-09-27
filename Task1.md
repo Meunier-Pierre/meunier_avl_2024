@@ -31,7 +31,7 @@ roi : manger l'attaquant ou bloquer sa ligne de vue
 
 Le nombre de 12 tests est réalisables, et j'ai donc écrit tous ces tests.     
 
-J'ai choisis de tester différents types de pièces non-roi, car il serait possibles que certaines    
+J'ai choisis de tester différents types de pièces non-roi, car il serait possible que certaines    
 pièces implémentent bien la fonction et d'autres non.        
 
 **Les Tests écrits pour le roi ont étés:**    
@@ -72,62 +72,87 @@ MyRookTests >> testNoMovesWhenCheckmate
 
 En regardant les tests, l'on se rend compte que le jeu présente les bugs suivants:    
 1. Lorsque le roi est en echec, ses mouvements deviennent restreints...  Mais il y a quelques    
-soucis avec l'algorithme utilisé.    
-2. Les pièces autres que le roi n'ont aucun mouvement restreint lorsque le roi est en echec,    
+soucis avec l'algorithme utilisé. Par exemple l'algorithme empeche le roi de manger quelqu'un.    
+J'ai vérifié cela avec des tests manuels.        
+2. Les pièces autres que le roi n'ont aucun mouvements restreints lorsque le roi est en echec,    
 ou echec et mat. Hors cela devrait être le cas.     
 
 # Refactoring   
 
-Les modifications que j'ai faites pour résoudre les bugs sont les suivantes:    
+J'ai commencé à faire des modifications dans le code pour résoudre les bugs détectés.    
+Mon idée de départ, était lorsque l'on demandait les mouvements, de tester chaque coup valide sur     
+des echequiers copies, puis de voir si l'on est en echec après le coup.    
 
-- **MyKing >> targetSquaresLegal (Protocol Rendering):** Recodage pour dire de renvoyer directement     
-basicTargetSquares dès lors que la case n'est pas nil, sauf si elle contient une pièce de notre    
-couleur. Cela était la fonction qui implémentait une restriction de mouvement en cas d'echec, pour     
-le roi, mais avec un bug. J'ai enlevé la restriction de mouvement pour le roi, en fonction des échecs.         
+Une idée simple, qui est en fait insoluble.    
+Avec cette idée l'on a la boucle infinie suivante.     
+legalTargetSquares >> appel isInCheck >> appel legalTargetSquares >> appel isInCheck....    
 
-- **My Piece >> legalTargetSquares (Protocol path commands):**  J'ai recodé pour **TO DO**     
- Auparavant la fonction renvoyait 
- ^ self targetSquaresLegal: true       
+J'ai donc codé seulement les modifications d'après.    
+ 
 
---------
+- **MyKing >> targetSquaresLegal (Protocol Rendering):**    
 
-checkForMat est dans MyChessGame et non PAS My Chess Board
+Le roi ne pouvais pas manger de pièce car targetSquaresLegal incluait le code    
 
-faire g := self board game
-puis g checkForMate
+```
+"Let's hope the piece is not defended"
+threatenedSquares includes: s   
+```
 
-----------
+que j'ai remplacé par le code pharo suivant, en suivant le commentaire.       
 
-MINCE la fonction My Piece >> legalTargetSquares (Protocol path commands) gére l'impossibilité physique mais PAS
-graphique, donc il va falloir changer la méthode ou je mets cela... + il va falloir changer mes tests ?
+```
+"Let's hope the piece is not defended"
+(threatenedSquares includes: s) not 
+```
 
-----------------------------
+- Ajout des méthodes **MyPiece >> MyKing (Accessing)** et **MyPiece >> MyKingAttacker (Accessing)**. 
+Ces méthodes sont des méthodes utiles pour la fonction d'après. Et elle ont été codées pour simplifier    
+son écriture.    
 
- Auparavant la fonction des pièces renvoyait 
- ^ self targetSquaresLegal: true   
+- **MyPiece >> legalTargetSquares (path commands):**    
 
- Maintenant cela est
+Les pièces pouvait se déplacer librement, même en cas d'echec du roi.    
+J'ai décidé de rester simple, et en cas d'echec de ne plus permettre à la pièce de se déplacer, sauf   
+pour manger une pièce attaquant le roi.   
 
- legalTargetSquares
+J'ai donc remplacé ce code
 
-   |result game testedContent valid firstSquare|.
+```
+legalTargetSquares
+    ^ self targetSquaresLegal: true
+```
 
-   result := OrderedCollection new.
-   firstSquare := self square.
-   game := self board game.
-   ( self targetSquaresLegal: true) do: [  :testedSquare | 
-	      testedContent := testedSquare contents.
-			game move: self to: testedSquare.
-			valid := (game checkForMate) not.
-	      game move: self to: firstSquare.
-	      testedSquare contents: testedContent.
-			
-			valid ifTrue: [ result add: testedSquare ].
-	 ].
+par
 
-	^ result.  
+```
 
- -------------------
+legalTargetSquares
 
-Je n'ai pas effectué de refactoring pour faire passer les tests.   
-Par manque de temps.    
+   |list attacker attackerSquare result|.
+   list := self targetSquaresLegal: true.
+
+   (self isKing) ifTrue:[
+       ^ list.
+    ] ifFalse:[
+        attacker := self myKingAttacker.
+        attacker isNil ifTrue:[^ list].
+       
+        result := OrderedCollection new.
+        attackerSquare := attacker square.
+        result add: attackerSquare.
+        (list includes: attackerSquare) ifTrue: [ ^ result] 
+	                                    ifFalse: [ ^ #() ].
+    ].
+
+	
+```
+
+# Resultat du refactoring   
+
+Grace au refactoring je suis passé de 5/ 12 tests en erreurs, à 3 / 12 tests.   
+Cela ne sont pas les mêmes tests qu'avant.   
+
+MyKingTests >> testCantStayInCheck   
+MyKnightTests >> testIfCheckCanMoveToProtectKing     
+MyQUeenTests >> testCantMoveIfKingInCheckAfter   
