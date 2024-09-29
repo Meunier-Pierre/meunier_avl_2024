@@ -11,7 +11,7 @@ La fonction ayant pour effet de restreindre les mouvements, il faut vérifier qu
 de mouvements invalides, mais aussi que l'on puisse toujours faire les mouvements valides.      
 
 **Cas NON-PASSANT trouvés / Mouvement interdits:**    
-- Sans cas de danger > un roi ne doit pas pouvoir se mettre sur une classe ou il deviendrait en danger   
+- Sans cas de danger > un roi ne doit pas pouvoir se mettre sur une case où il deviendrait en danger   
 - Sans cas de danger > une piece non roi ne doit pas pouvoir bouger si elle met son roi en danger
 - Cas d'Echec > le roi ne doit pas pouvoir bouger sur une case ou il serait encore en danger  
 - Cas d'Echec > Une piece non-roi ne doit pas pouvoir bouger si son mouvement ne protege pas le     
@@ -91,7 +91,7 @@ J'ai donc codé seulement les modifications d'après.
 
 - **MyKing >> targetSquaresLegal (Protocol Rendering):**    
 
-Le roi ne pouvais pas manger de pièce car targetSquaresLegal incluait le code    
+Le roi ne pouvait pas manger de pièce car targetSquaresLegal incluait le code    
 
 ```
 "Let's hope the piece is not defended"
@@ -106,7 +106,7 @@ que j'ai remplacé par le code pharo suivant, en suivant le commentaire.
 ```
 
 - Ajout des méthodes **MyPiece >> MyKing (Accessing)** et **MyPiece >> MyKingAttacker (Accessing)**.    
-Méthodes utilisées après par ma nouvelle fonction.    
+Méthodes utilisées après par la fonction legalTargetSquares après recodage.     
 
 - **MyPiece >> legalTargetSquares (path commands):**    
 

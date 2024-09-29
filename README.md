@@ -24,18 +24,20 @@ https://github.com/avl-univ-lille/testing/blob/2024/agenda.md
 
 # Reponse    
 
-Les réponses du TP1 sont écrits dans le fichier     
+Les réponses du TP1 sont écrits dans ces fichiers     
 [Task1.md](./Task1.md)  
-
+[Task2.md](./Task2.md)  
 
 # Avancement    
 
-Task1 finie.    
+Task1 finie.   
+
+Task2 en cours.   
 
 # Import du projet     
 
 Pour importer le projet de l'étudiant, après avoir ouvert  une image Pharo 12.0 il faudra ouvrir le    
-playground avec Browse > Playground puis utiliser la commande
+playground avec Browse > Playground puis utiliser la commande   
 
 ```
 Metacello new
@@ -43,6 +45,16 @@ Metacello new
 	baseline: 'MygChess';
 	onConflictUseLoaded;
 	load.
+```
+
+vous pouvez ensuite importer de quoi faire les tests de mutation avec   
+
+```
+Deprecation activateTransformations: false.
+Metacello new
+  baseline: 'MuTalk';
+  repository: 'github://pharo-contributions/mutalk:v2.5.0/src';
+  load.
 ```
 
 
