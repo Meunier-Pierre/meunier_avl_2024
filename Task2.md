@@ -67,21 +67,210 @@ Chance que un mutant couvert soit tué:  37 / 54.61 soit 67.8 %
 Note: Comme le TP fourni un jeu volontairement bugué, et que j'ai 3 tests "yellow", car le    
 refactoring total était compliqué, cela baisse aussi les chances de tuer un mutant couvert.   
 
+## Mutants Equivalents    
+
+J'ai trouvé 2 mutants équivalents que j'explique en 1. et 2.    
+Il s'agit de mutants graphiques.    
+
+Je n'ai trouvé aucun mutant équivalent côté logique / backend.    
+Je montre dans "III. Recherche mutant équivalent Logique" un peu du travail que j'ai effectué pour essayer de    
+chercher des mutants équivalents sur des conditions.    
+
+
+### I. Augmentation de la marge de 20 à 21
+
+Mutant: Increase a little integer in MyChessGame>>#initializeFromFENGame
+Est équivalent car: La marge n'a aucun importance, surtout pour une petite modification
+
+Code original
+
+```
+initializeFromFENGame: aFENGame
+
+	...
+
+	infoPane := ToElement new.
+	infoPane constraintsDo: [ :c |
+		c vertical fitContent.
+		c horizontal matchParent ].
+	infoPane layout: BlLinearLayout vertical.
+	infoPane layout cellSpacing: 10.
+	infoPane margin: (BlInsets all: 20).
+	infoPane matchParent.
+
+    ...
+```
+
+Code muté
+
+```
+initializeFromFENGame: aFENGame
+
+	...
+
+	infoPane := ToElement new.
+	infoPane constraintsDo: [ :c |
+		c vertical fitContent.
+		c horizontal matchParent ].
+	infoPane layout: BlLinearLayout vertical.
+	infoPane layout cellSpacing: 10.
+	infoPane margin: (BlInsets all: 21).
+	infoPane matchParent.
+
+    ...
+```
+
+### II. Changement de Font 48 à 49
+
+Mutant: Increase a literal integer in MyChessSquare >>#contents
+Est équivalent car: La police d'écriture n'a aucune importance, surtout pour une petite modification
+
+Code original
+
+```
+contents: aPiece
+
+	| text |
+	contents := aPiece.
+
+	text := contents
+		        ifNil: [
+			        color isBlack
+				        ifFalse: [ 'z' ]
+				        ifTrue: [ 'x' ] ]
+		        ifNotNil: [ contents renderPieceOn: self ].
+	piece text: (text asRopedText
+			 fontSize: 48;
+			 foreground: self foreground;
+			 fontName: MyOpenChessDownloadedFont new familyName)
+```
+
+Code muté
+
+```
+contents: aPiece
+
+	| text |
+	contents := aPiece.
+
+	text := contents
+		        ifNil: [
+			        color isBlack
+				        ifFalse: [ 'z' ]
+				        ifTrue: [ 'x' ] ]
+		        ifNotNil: [ contents renderPieceOn: self ].
+	piece text: (text asRopedText
+			 fontSize: 49;
+			 foreground: self foreground;
+			 fontName: MyOpenChessDownloadedFont new familyName)
+```
+
+### III. Recherche mutant équivalent logique   
+
+Ici je vais montrer que j'ai cherché des mutants équivalents.     
+Et je vais montrer pourquoi ils ne sont pas équivalents.    
+On va être sur de la condition or / xor, and / nand...   
+
+### III.1 Premier exemple, mutant 90
+
+Soit le mutant 90 "Replace #or: with #bXor: in MyPawn>>#TargetSquareLegel".    
+
+Code original
+
+```
+targetSquaresLegal: aBoolean
+
+	^ (self isWhite
+		   ifTrue: [ { square up } ]
+		   ifFalse: [ { square down } ]) select: [ :s |
+		  s notNil and: [ s hasPiece not or: [ s contents color ~= color ] ] ]
+```
+
+Code muté
+
+```
+targetSquaresLegal: aBoolean
+
+	^ (self isWhite
+		   ifTrue: [ { square up } ]
+		   ifFalse: [ { square down } ]) select: [ :s |
+		  s notNil and: [
+			  s hasPiece not bXor: [ s contents color ~= color ] ] ]
+```
+
+Appelons    
+**cond1:** s hasPiece not    
+**cond2 :** s contents color ~= color   
+Les deux variables sont liées car si cond1 est vraie, alors cond2 va soit appeller une fonction sur nil (crash),    
+soit renvoyer une couleur nil. J'ai testé avec un code en playground cond2 sur une case vide, en vrai cela provoque un    
+appel sur nil et un crash.        
+
+
+La comparaison est donc la suivante.    
+L'on voit que le mutant n'est pas équivalent.         
+
+|                  | cond1 vraie cond2 NON EVALUABLE  | cond1 fausse cond2 vraie       | cond1 fausse cond2 fausse       | 
+| :---------------:|:---------------:                 | :---------------:              | :---------------:               |   
+| Avant mutation   |            Vrai                  |            Vrai                |             Faux                |   
+| Après mutation   |            CRASH                 |            Vrai                |             Faux                |  
+
+
+### III.2 Deuxième exemple, mutant 147    
+
+Soit le mutant 147 "Replace #and with #bEqv: in MyKing>>#isCheckMated".     
+
+Code original
+
+```
+isCheckMated
+	"We check if the opponent pieces target all my potential movements and myself"
+
+	| threatenedSquares |
+	threatenedSquares := self opponentPieces flatCollect: [ :e |
+		                     e attackingSquares ].
+
+	^ self legalTargetSquares isEmpty and: [
+		  threatenedSquares includes: self square ]
+```
+
+Code muté
+
+```
+isCheckMated
+	"We check if the opponent pieces target all my potential movements and myself"
+
+	| threatenedSquares |
+	threatenedSquares := self opponentPieces flatCollect: [ :e |
+		                     e attackingSquares ].
+
+	^ self legalTargetSquares isEmpty bEqv: [
+		  threatenedSquares includes: self square ]
+```
+
+Appelons    
+**cond1:** legalTargetSquares isEmpty     
+**cond2 :** threatenedSquares includes: self square   
+
+Les 2 variables ne sont pas liées. Car le roi n'a pas le droit de bouger sur une case ou il est en danger.    
+Mais le fait que les cases autour de lui soit en danger, n'a pas de lien avec le fait d'être en danger sur sa case actuelle.    
+
+La comparaison est donc la suivante.    
+L'on voit que le mutant n'est pas équivalent.     
+Pour rappel bEqv est la même chose que "=".
+
+
+|                  | cond1 vraie cond2 vraie  | cond1 vraie cond2 fausse       | cond1 fausse cond2 vraie|  cond1 fausse cond2 fausse |
+| :---------------:|:---------------:         | :---------------:              | :---------------:       |    :---------------:       |
+| Avant mutation   |            VRAI          |            FAUX                |      FAUX               |          FAUX              |
+| Après mutation   |            VRAI          |            FAUX                |      FAUX               |          VRAI              |
+
 
 ##  Strategie 
 
+
 -----------------
 
-**TODO** Ne pas oublier de selectionner 3 mutants specifiques à tuer... Le décrire dans la stratégie ?    
-**TODO** Description strategy pour savoir quels tests ajouter      
-Description des tests ajoutés     
-
-**TO DO** ATTENTION ici rappeller le principe "Right BICEPS" quand je parle des tests que je n'ai pas écrit (ex: Performance)     
-           Et comme ca il y aura à dire    
-
-**TODO** your mutation score after adding tests    
-what test you did not write and why    
-an in-detail explanation of 3 mutants you killed and how you killed them     
-an in-detail explanation of 3 equivalent mutants, explaining why they are equivalent     
+**TODO** Selectionner 3 mutants à tuer + écrire des tests pour monter score mutation + expliquer strategie monter score mutation
+**TODO** Rapport test à écrire parler "Right BICEPS"
 
 -----------------
