@@ -21,11 +21,29 @@ analysis := MTAnalysis new
     budget: (MTTimeBudget for: 3 minutes).
 
 analysis run.
-analysis generalResult mutationScore.
+analysis generalResult mutationScore.   
 ```
 
-Pour obtenir les mutants survivants j'effectue presque le même code.  
-Seule la dernière ligne est modifiée en "analysis generalResult."
+Pour obtenir les mutants survivants j'effectue presque le même code.     
+Seule la dernière ligne est modifiée en "analysis generalResult."    
+
+
+## Scores mutation initial 
+
+En plus du score de mutation, je vais indiquer les taux de coverage. Et cela car un taux de     
+mutation très éloigné du taux de coverage indique souvent un soucis, car dans le test les      
+assertions ne sont pas assez fines.    
+
+Je vais effectuer les tests sur mon code refactoré pour le kata "Restrict legal moves".           
+
+**Score initial:**     
+
+Taux de couverture: 54.61 % pour le package "Myg-Chess-Core".     
+Score de mutation: 37%                     
+Chance que un mutant couvert soit tué:  37 / 54.61 soit 67.8 %
+
+Note: Comme le TP fourni un jeu volontairement bugué, et que j'ai 3 tests "yellow", car le    
+refactoring total était compliqué, cela baisse aussi les chances de tuer un mutant couvert.   
 
 
 ## Strategie Elimination mutant     
@@ -58,7 +76,7 @@ analysis run.
 MyChessBoard >> initializePiece : 193 mutants survivants   
 MyChessSquare >> initialize : 116 mutants survivants    
 MyKnight >> targetSquaresLegal : 47 mutants survivants   
-MyPawn >> targetSquaresLegal : 39 mutants survivants    
+MyPawn >> targetSquaresLegal : 39 mutants survivants avant refactoring, 27 après (6ème position)  
 MyChessBoard >> initializeFromFENBoard: 36 mutants survivants    
 MyChessBoard >> initialize: 31 mutants survivants  
 
@@ -66,6 +84,31 @@ Après analyse, MyChessSquare >> initialize et MyChessBoard >> initialize sont d
 MyChessBoard >> initializeFromFENBoard est... un code assez spécial que je ne comprends pas.       
 Je vais donc dans la suite me concentrer uniquement sur les 3 fonctions restantes.    
 279 mutants sur plus de 600 encore vivants.     
+
+## Refactoring sur MyPawn >> targetSquaresLegal   
+
+Bon comme visiblement je vais devoir tester l'horreur du pion bugué, dont j'ai lu le code, j'en ai profité   
+pour corriger une partie du code. Les mutants ne peuvent de toute façon pas être tué quand le test initial    
+est jaune. C'est pour cela que j'ai réparé un bug, parmis plusieurs.            
+
+Le code avant était
+
+```
+targetSquaresLegal: aBoolean
+
+	^ (self isWhite
+		   ifTrue: [ { square up } ]
+		   ifFalse: [ { square down } ]) select: [ :s |
+		  s notNil and: [
+			  s hasPiece not or: [ s contents color ~= color ] ] ]
+```
+
+**Le bugs était:** Un pion pouvait manger un adversaire devant lui au lieu d'être bloqué.   
+**Réparation:**  J'ai remplacé "s notNil and: [ s hasPiece not or: [ s contents color ~= color ]]" par    
+"s notNil and: [ s hasPiece not]"     
+**Influence sur le nombre de mutant survivant:** Le code étant plus simple, il y a moins de mutants générés.     
+27 mutants survivants au lieu de 39. 6ème position.    
+
 
 ## Selection de 3 mutants a tuer        
 
@@ -82,12 +125,13 @@ comme pour la mutation, et en vérifiant que le test passe de vert à jaune.
     Au lieu de select: [ :s | s notNil and: [ s hasPiece not or: [ s contents color ~= color ] ] ] cela est remplacé par   
  select: [ :s | s notNil and: [ true ] ]    
 
- "x Replace Select block with [:each |true] in MyPawn>>#targetSquaresLegal:"    
-    Au lieu de select: [ :s | s notNil and: [s hasPiece not or: [ s contents color ~= color ] ] ] cela est remplacé par   
-[:each |true]     
+ " Remove #not in MyPawn>>#targetSquaresLegal"    
+    Au lieu de select: select: [ :s |s notNil and: [ s hasPiece not ] ] cela est remplacé par  [ :s | s notNil and: [ 
+	s hasPiece ] ]    
 
 Bon au vue du mutant assez grossier qui passait dans les pions, j'ai vérifié, et oui il y avait 0 tests sur le pion.    
-Ce n'était pas nécessairement dans mon Kata, mais on va réparer cela.   
+Ce n'était pas nécessairement dans mon Kata, mais on va réparer cela. C'est aussi la que j'ai vu que... j'allais réparer   
+légèrement le code avant de tester. Pour avoir un peu de vert.     
 
 ## Les tests que je choisis d'écrire  
 
@@ -102,16 +146,22 @@ l'on peut aussi initialiser un échequier avec une FEN, je vais juste faire ce q
 J'initialise un echequier avec "initialize Piece", un avec une stringFEN. Et je compare si les 2 échequiers sont    
 identiques en termes de comportement.         
 
-Concernant les 2 autres tests cela va être du test de mouvement simple comme effectuer en Task1.    
-Il va falloir trouver des cas précis à trouver, et tester les cases ou l'on peut aller. En gardant en tête que les pions   
-sont un peu bugué. Et que en mutation, il faut un test vert au départ. Donc je vais tester uniquement les fonctionnalitées    
-correctes.   
+Concernant les 2 autres tests cela va être du test de mouvement simple comme effectué en Task1.    
+Il va falloir trouver des cas précis à trouver, et tester les cases ou l'on peut aller. Selon qu'il y a un opposant, qu'il   
+n'y a pas d'opposant, que l'on soit au bord du plateau...    
 
-Les tests que je choisis d'implémenter vont donc être:     
-**TODO: Ecrire tests en francais**    
+**Les tests que je choisis d'implémenter vont donc être:**     
+- Test différentiel entre une initialisation avec MyChessBoard>>#initializePiece et MyChessGame >> FromFENString:    
+   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' auquel je demande l'attribut board. Je vérifie que les   
+    2 sont égaux.    
+- Test des mouvement d'un cavalier en bord de plateau   
+- Test qu'un cavalier ne peut pas manger un pion allié    
+- un pion noir avance d'une case en bas   
+- un pion blanc avec une tour noir devant ne peut pas avancer    
 
 J'ai écris les tests.     
-Le nom dans mon code sont:      
+
+**Les nom dans mon code sont:**      
 
 **TODO : Ecrire le nom des fonctions** 
 
@@ -131,7 +181,7 @@ De plus, je n'ai pas écrit de tests pour lequels peu de mutants ont survécu, c
 des "tests guidés" en l'occurence des tests guidés par le score de mutation.    
 
 Cela est cohérent avec l'exercice demandé.    
-Mais en pratique en entreprise il y a 3 effets indésirables:     
+Mais en pratique en entreprise il y a 2 effets indésirables:     
 - Si le framework de test de mutation évite à tort certaines fonctions, à cause d'une mauvaise stratégie de génération    
 l'on peut ne pas tester une fonction importante.    
 - Un test guidé par du code et non des spécifications, peu ne pas voir certains cas de test. Spécifiquement si le    
@@ -143,22 +193,6 @@ le même CA dans la base de donnée destinataire". Véridique.
 
 **TODO ecrire score mutation final**
 
-## Scores mutation initial 
-
-En plus du score de mutation, je vais indiquer les taux de coverage. Et cela car un taux de     
-mutation très éloigné du taux de coverage indique souvent un soucis, car dans le test les      
-assertions ne sont pas assez fines.    
-
-Je vais effectuer les tests sur mon code refactoré pour le kata "Restrict legal moves".           
-
-**Score initial:**     
-
-Taux de couverture: 54.61 % pour le package "Myg-Chess-Core".     
-Score de mutation: 37%                     
-Chance que un mutant couvert soit tué:  37 / 54.61 soit 67.8 %
-
-Note: Comme le TP fourni un jeu volontairement bugué, et que j'ai 3 tests "yellow", car le    
-refactoring total était compliqué, cela baisse aussi les chances de tuer un mutant couvert.   
 
 ## Mutants Equivalents    
 
@@ -307,7 +341,7 @@ L'on voit que le mutant n'est pas équivalent.
 
 -----------------
 
-**TO DO** J'ai 4 TODO en haut. Les faires. 3 sont pour écrire des tests.    
-Et 1 est pour le truc hyper important de dire les scores finaux !!      
+**TO DO** J'ai 3 TODO en haut. Les faires. 2 sont pour écrire des tests.    
+Et 1 est pour le truc hyper important de dire les scores coverage / mutation finaux !!      
 
 -----------------
