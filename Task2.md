@@ -120,7 +120,7 @@ comme pour la mutation, et en vérifiant que le test passe de vert à jaune.
 **Les mutants que j'ai choisit de tuer:**   
 
 
-|**"2 Convert a literal string to emptyString in MyChessBoard>>#initializePiece"** |    
+**"2 Convert a literal string to emptyString in MyChessBoard>>#initializePiece"**    
     Au lieu de mettre MyKing White en 'e1' l'on met '' en e1   
 
 **"12 Replace #or: with true in MyKnight>>#targetSquaresLegal:"**    
