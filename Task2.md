@@ -72,7 +72,7 @@ analysis run.
 		associations sorted: [ :a :b | a value size > b value size ].
 ```
 
-**Les résultats:** 
+**Les résultats:**      
 MyChessBoard >> initializePiece : 193 mutants survivants   
 MyChessSquare >> initialize : 116 mutants survivants    
 MyKnight >> targetSquaresLegal : 47 mutants survivants   
@@ -80,15 +80,15 @@ MyPawn >> targetSquaresLegal : 39 mutants survivants avant refactoring, 27 aprè
 MyChessBoard >> initializeFromFENBoard: 36 mutants survivants    
 MyChessBoard >> initialize: 31 mutants survivants  
 
-Après analyse, MyChessSquare >> initialize et MyChessBoard >> initialize sont du code graphique.      
-MyChessBoard >> initializeFromFENBoard est... un code assez spécial que je ne comprends pas.       
-Je vais donc dans la suite me concentrer uniquement sur les 3 fonctions restantes.    
-279 mutants sur plus de 600 encore vivants.     
+Après analyse, **MyChessSquare >> initialize** et **MyChessBoard >> initialize** sont du code graphique.      
+**MyChessBoard >> initializeFromFENBoard** est... un code assez spécial que je ne comprends pas.       
+Je vais donc dans la suite me concentrer uniquement sur les 3 fonctions restantes. 267 mutants sur plus    
+de 600 encore vivants.     
 
 ## Refactoring sur MyPawn >> targetSquaresLegal   
 
-Bon comme visiblement je vais devoir tester l'horreur du pion bugué, dont j'ai lu le code, j'en ai profité   
-pour corriger une partie du code. Les mutants ne peuvent de toute façon pas être tué quand le test initial    
+Bon comme visiblement je vais devoir tester les pions qui sont bugués, dont j'ai lu le code, j'en ai profité   
+pour corriger une partie du code. Les mutants ne peuvent de toute façon pas être tués quand le test initial    
 est jaune. C'est pour cela que j'ai réparé un bug, parmis plusieurs.            
 
 Le code avant était
@@ -106,11 +106,12 @@ targetSquaresLegal: aBoolean
 **Le bugs était:** Un pion pouvait manger un adversaire devant lui au lieu d'être bloqué.   
 **Réparation:**  J'ai remplacé "s notNil and: [ s hasPiece not or: [ s contents color ~= color ]]" par    
 "s notNil and: [ s hasPiece not]"     
+   
 **Influence sur le nombre de mutant survivant:** Le code étant plus simple, il y a moins de mutants générés.     
 27 mutants survivants au lieu de 39. 6ème position.    
 
 
-## Selection de 3 mutants a tuer        
+## Selection de 3 mutants à tuer        
 
 Suite à ma stratégie d'élimination des mutants, je vais selectionner 3 mutants à tuer dans les six fonctions avec le   
 plus de mutants survivants. Je vais évaluer que le mutant est bien tué en modifiant ensuite moi même mon code   
@@ -118,14 +119,15 @@ comme pour la mutation, et en vérifiant que le test passe de vert à jaune.
 
 **Les mutants que j'ai choisit de tuer:**   
 
-"2 Convert a literal string to emptyString in MyChessBoard>>#initializePiece"     
+
+|**"2 Convert a literal string to emptyString in MyChessBoard>>#initializePiece"** |    
     Au lieu de mettre MyKing White en 'e1' l'on met '' en e1   
 
-"12 Replace #or: with true in MyKnight>>#targetSquaresLegal:"    
+**"12 Replace #or: with true in MyKnight>>#targetSquaresLegal:"**    
     Au lieu de select: [ :s | s notNil and: [ s hasPiece not or: [ s contents color ~= color ] ] ] cela est remplacé par   
  select: [ :s | s notNil and: [ true ] ]    
 
- " Remove #not in MyPawn>>#targetSquaresLegal"    
+**" Remove #not in MyPawn>>#targetSquaresLegal"**    
     Au lieu de select: select: [ :s |s notNil and: [ s hasPiece not ] ] cela est remplacé par  [ :s | s notNil and: [ 
 	s hasPiece ] ]    
 
@@ -196,77 +198,15 @@ le même CA dans la base de donnée destinataire". Véridique.
 
 ## Mutants Equivalents    
 
-J'ai trouvé 2 mutants équivalents que j'explique en 1. et 2.    
-Il s'agit de mutants graphiques.    
+J'avais trouvé 2 mutants graphiques qui pour moi étaient équivalent, changement de paramètres graphiques de 20 à 21, ou     
+de 48 à 49. Mais j'ai cru comprendre que cela n'était pas vraiment des mutants équivalents pour le professeur.    
 
-Je n'ai trouvé aucun mutant équivalent côté logique / backend.    
-Je montre dans "III. Recherche mutant équivalent Logique" un peu du travail que j'ai effectué pour essayer de    
-chercher des mutants équivalents sur des conditions.    
-
-
-### I. Augmentation de la marge de 20 à 21
-
-**Mutant:** Increase a little integer in MyChessGame>>#initializeFromFENGame
-**Est équivalent car:** La marge n'a aucun importance, surtout pour une petite modification
-
-Code original
-
-```
-initializeFromFENGame: aFENGame
-
-	...
-
-	infoPane := ToElement new.
-	infoPane constraintsDo: [ :c |
-		c vertical fitContent.
-		c horizontal matchParent ].
-	infoPane layout: BlLinearLayout vertical.
-	infoPane layout cellSpacing: 10.
-	infoPane margin: (BlInsets all: 20).
-	infoPane matchParent.
-
-    ...
-```
-
-**Code muté :** Dans "infoPane margin: (BlInsets all: 20)." le 20 devient un 21
+Je n'ai trouvé aucun mutant équivalent côté logique / backend.     
+Je montre quand même pas des petits exemple pour montrer que j'ai cherché. Et que j'ai fais les tables de logique avec    
+du or / bXor , and / bEqv.     
 
 
-
-### II. Changement de Font 48 à 49
-
-**Mutant:** Increase a literal integer in MyChessSquare >>#contents
-**Est équivalent car:** La police d'écriture n'a aucune importance, surtout pour une petite modification
-
-Code original
-
-```
-contents: aPiece
-
-	| text |
-	contents := aPiece.
-
-	text := contents
-		        ifNil: [
-			        color isBlack
-				        ifFalse: [ 'z' ]
-				        ifTrue: [ 'x' ] ]
-		        ifNotNil: [ contents renderPieceOn: self ].
-	piece text: (text asRopedText
-			 fontSize: 48;
-			 foreground: self foreground;
-			 fontName: MyOpenChessDownloadedFont new familyName)
-```
-
-**Code muté:** Remplacement de "fontSize: 48;" par "fontSize: 49;"
-
-
-### III. Recherche mutant équivalent logique   
-
-Ici je vais montrer que j'ai cherché des mutants équivalents.     
-Et je vais montrer pourquoi ils ne sont pas équivalents.    
-On va être sur de la condition or / xor, and / nand...   
-
-### III.1 Premier exemple mutant équivalent, mutant 90
+### III.1 Recherche échoué d'un mutant équivalent, mutant 90
 
 Soit le mutant 90 "Replace #or: with #bXor: in MyPawn>>#TargetSquareLegel".    
 
@@ -283,7 +223,6 @@ targetSquaresLegal: aBoolean
 
 **Code muté:** Remplacement du "or:" par "bXor:"
 
-
 Appelons    
 **cond1:** s hasPiece not    
 **cond2 :** s contents color ~= color   
@@ -299,7 +238,7 @@ L'on voit que le mutant n'est pas équivalent.
 | Après mutation   |            CRASH                 |            Vrai                |             Faux                |  
 
 
-### III.2 Deuxième exemple mutant équivalent, mutant 147    
+### III.2 Recherche échoué d'un mutant équivalent, mutant 147    
 
 Soit le mutant 147 "Replace #and with #bEqv: in MyKing>>#isCheckMated".     
 
