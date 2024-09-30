@@ -42,9 +42,72 @@ analysis run.
 analysis generalResult.
 ``` 
 
+## Strategie Elimination mutant     
+
+La strategie que je vais suivre pour améliorer le score de mutation va être de grouper les mutants survivants par méthode mutée.    
+Je vais aussi en profiter pour diminuer les classes testées, pour tester uniquement celles ou cela est plus facile à tester.    
+
+```
+
+testPackages := {'Myg-Chess-Tests'.}.
+classesToMutate := { MyChessBoard. MyChessSquare. MyPiece. MyBishop. MyKing. MyKnight. MyPawn. MyQueen. MyRook.}.
 
 
-## Scores initiaux    
+analysis := MTAnalysis new
+    testPackages: testPackages;
+    classesToMutate: classesToMutate;
+    testSelectionStrategy: MTSelectingFromCoverageTestSelectionStrategy new;
+    stopOnErrorOrFail: true;
+    budget: (MTTimeBudget for: 3 minutes).
+
+analysis run.
+
+((analysis generalResult aliveMutants)
+	groupedBy: [ :m |m mutant originalMethod ])
+		associations sorted: [ :a :b | a value size > b value size ].
+```
+
+**Les résultats:** 
+MyChessBoard >> initializePiece : 193 mutants survivants   
+MyChessSquare >> initialize : 116 mutants survivants    
+MyKnight >> targetSquaresLegal : 47 mutants survivants   
+MyPawn >> targetSquaresLegal : 39 mutants survivants    
+MyChessBoard >> initializeFromFENBoard 36 mutants survivants    
+
+## Elimination de 3 mutants précis     
+
+Suite à ma stratégie d'élimination des mutants, je vais selectionner 3 mutants à tuer dans les cinq fonctions avec le   
+plus de mutants survivants. Je vais évaluer que le mutant est bien tué en modifiant ensuite moi même mon code   
+comme pour la mutation, et en vérifiant que le mutant est bien repéré.    
+
+**Les mutants que j'ai choisit de tuer:**   
+
+"2 Convert a literal string to emptyString in MyChessBoard>>#initializePiece"     
+    Au lieu de mettre MyKing White en 'e1' l'on met '' en e1   
+
+"12 replace #or: with true in MyKnight>>#targetSquaresLegal:"    
+    Au lieu de select: [ :s | s notNil and: [ s hasPiece not or: [ s contents color ~= color ] ] ] cela est remplacé par   
+ select: [ :s | s notNil and: [ true ] ]    
+
+**TO DO 3ème mutant à trouver**
+
+**Les Tests que j'ai rajouté pour tuer les mutants:**    
+
+**TO DO**
+
+## Ecriture de Tests   
+
+**TODO**
+
+## Tests non écrits et pourquoi    
+
+**TODO**
+
+## Score mutation final
+
+**TODO**
+
+## Scores mutation initial 
 
 En plus du score de mutation, je vais indiquer les taux de coverage. Et cela car un taux de     
 mutation très éloigné du taux de coverage indique souvent un soucis, car dans le test les      
@@ -270,7 +333,21 @@ Pour rappel bEqv est la même chose que "=".
 
 -----------------
 
-**TODO** Selectionner 3 mutants à tuer + écrire des tests pour monter score mutation + expliquer strategie monter score mutation
+**TO DO** Ecrire en haut le nom des 3 mutants que j'ai décidé de tuer
+**TO DO** Ecrire en haut le nom des tests que j'ai fait pour tuer ces mutants la    
+**TODO** Selectionner 3 mutants à tuer + EXPLIQUER POURQUOI DES TESTS PAS ECRITS (rappel Biceps) + écrire des tests pour monter score mutation + 
+expliquer strategie monter score mutation
 **TODO** Rapport test à écrire parler "Right BICEPS"
+
+**Evaluer par:**
+Score mutation après >> **Hyper IMPORTANT**
+
+A report of your work in a markdown file (Task2.md) in the root of that repository. The report should explain
+the scripts and configuration you used to run the analysis
+your initial mutation score
+your mutation score after adding tests
+what test you did not write and why
+an in-detail explanation of 3 mutants you killed and how you killed them
+an in-detail explanation of 3 equivalent mutants, explaining why they are equivalent
 
 -----------------
