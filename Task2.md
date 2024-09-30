@@ -198,7 +198,7 @@ le même CA dans la base de donnée destinataire". Véridique.
 
 ## Mutants Equivalents    
 
-J'avais trouvé 2 mutants graphiques qui pour moi étaient équivalent, changement de paramètres graphiques de 20 à 21, ou     
+J'avais trouvé 2 mutants graphiques qui pour moi étaient équivalents, changement de paramètres graphiques de 20 à 21, ou     
 de 48 à 49. Mais j'ai cru comprendre que cela n'était pas vraiment des mutants équivalents pour le professeur.    
 
 Je n'ai trouvé aucun mutant équivalent côté logique / backend.     
@@ -226,7 +226,7 @@ targetSquaresLegal: aBoolean
 Appelons    
 **cond1:** s hasPiece not    
 **cond2 :** s contents color ~= color   
-Les deux variables sont liées car si cond1 est vraie, alors cond2 va soit appeller une fonction sur nil (crash).    
+Les deux variables sont liées car si cond1 est vraie, alors cond2 va appeller une fonction sur nil (crash).    
 J'ai vérifié ce comportement en playground en demandant "square contents color" sur une case vide.      
 
 La comparaison est donc la suivante.    
@@ -263,7 +263,7 @@ Appelons
 **cond1:** legalTargetSquares isEmpty     
 **cond2 :** threatenedSquares includes: self square   
 
-Les 2 variables ne sont pas liées. Car le roi n'a pas le droit de bouger sur une case ou il est en danger.    
+Les 2 variables ne sont pas liées. Car le roi n'a pas le droit de bouger sur une case où il est en danger.    
 Mais le fait que les cases autour de lui soit en danger, n'a pas de lien avec le fait d'être en danger sur sa case actuelle.    
 
 La comparaison est donc la suivante.    
