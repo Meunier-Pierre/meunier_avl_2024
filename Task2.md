@@ -5,25 +5,42 @@
 ## Obtention des scores initiaux    
 
 Pour obtenir les scores initiaux, j'ai effectué le test suivant.   
-En plus des optimisations usuelles, j'ai demandé à effectuer le test sur 40% du budget.   
+En plus des optimisations usuelles, j'ai demandé à effectuer le test sur 3 minutes.    
+J'ai cherché certaines méthodes en analysant l'objet "MTAnalysis" et en regardant l'onglet Meta.    
 
 ```
-testCases :=  { MyBishopTests. MyFENTest. MyKingTests. MyKnightTests. MyQueenTests. MyRookTests}.
-classesToMutate := { MyChessBoard. MyChessGame. MyChessSquare. MyOpenChessDownloadedFont. MyPiece. MyPlayer. MyBishop. MyKing. MyKnight. MyPawn. MyQueen. MyRook. MySelectedState. MyUnselectedState. }.
 
+testPackages := {'Myg-Chess-Tests'.}.
+packagesToMutate := {'Myg-Chess-Core'}.
 
 analysis := MTAnalysis new
-    testClasses: testCases;
-    classesToMutate: classesToMutate;
+    testPackages: testPackages;
+    packagesToMutate:  packagesToMutate;
     testSelectionStrategy: MTSelectingFromCoverageTestSelectionStrategy new;
     stopOnErrorOrFail: true;
-    budget: (MTPercentageOfMutantsBudget for: 40).
+    budget: (MTTimeBudget for: 3 minutes).
 
-    analysis run.
-    analysis generalResult mutationScore.
+analysis run.
+analysis generalResult mutationScore.
 ```
 
-Pour obtenir les mutants survivants je remplace "analysis generalResult mutationScore." par "alive := analysis generalResult aliveMutants." Et ensuite je fais un petit inspect.    
+Pour obtenir les mutants survivants j'effectue le code suivant.   
+Seule la dernière ligne est modifiée.    
+
+```
+testPackages := {'Myg-Chess-Tests'.}.
+packagesToMutate := {'Myg-Chess-Core'}.
+
+analysis := MTAnalysis new
+    testPackages: testPackages;
+    packagesToMutate:  packagesToMutate;
+    testSelectionStrategy: MTSelectingFromCoverageTestSelectionStrategy new;
+    stopOnErrorOrFail: true;
+    budget: (MTTimeBudget for: 3 minutes).
+
+analysis run.
+analysis generalResult.
+``` 
 
 
 
@@ -55,16 +72,16 @@ refactoring total était compliqué, cela baisse aussi les chances de tuer un mu
 
 -----------------
 
-**TODO** Ne pas oublier de selectionner 3 mutants specifiques à tuer... Le décrire dans la stratégie ?
-**TODO** Description strategy pour savoir quels tests ajouter 
-Description des tests ajoutés
+**TODO** Ne pas oublier de selectionner 3 mutants specifiques à tuer... Le décrire dans la stratégie ?    
+**TODO** Description strategy pour savoir quels tests ajouter      
+Description des tests ajoutés     
 
-**TO DO** ATTENTION ici rappeller le principe "Right BICEPS" quand je parle des tests que je n'ai pas écrit (ex: Performance)
-           Et comme ca il y aura à dire
+**TO DO** ATTENTION ici rappeller le principe "Right BICEPS" quand je parle des tests que je n'ai pas écrit (ex: Performance)     
+           Et comme ca il y aura à dire    
 
-**TODO** your mutation score after adding tests
-what test you did not write and why
-an in-detail explanation of 3 mutants you killed and how you killed them
-an in-detail explanation of 3 equivalent mutants, explaining why they are equivalent
+**TODO** your mutation score after adding tests    
+what test you did not write and why    
+an in-detail explanation of 3 mutants you killed and how you killed them     
+an in-detail explanation of 3 equivalent mutants, explaining why they are equivalent     
 
 -----------------
