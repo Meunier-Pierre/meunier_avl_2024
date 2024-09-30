@@ -59,6 +59,9 @@ refactoring total était compliqué, cela baisse aussi les chances de tuer un mu
 **TODO** Description strategy pour savoir quels tests ajouter 
 Description des tests ajoutés
 
+**TO DO** ATTENTION ici rappeller le principe "Right BICEPS" quand je parle des tests que je n'ai pas écrit (ex: Performance)
+           Et comme ca il y aura à dire
+
 **TODO** your mutation score after adding tests
 what test you did not write and why
 an in-detail explanation of 3 mutants you killed and how you killed them
