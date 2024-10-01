@@ -2,6 +2,16 @@
 
 # Task 2 : Mutation Testing    
 
+## Sommaire   
+
+[Scores initiaux](#scores-initiaux)
+[Strategie Elimination mutant / Choix des Mutants à tuer](#strategie-elimination-mutant--choix-des-mutants-à-tuer)
+[Refactoring sur MyPawn >> targetSquaresLegal](#refactoring-sur-mypawn--targetsquareslegal)
+[Les tests que j'ai choisis d'écrire](#les-tests-que-jai-choisis-décrire)
+[Tests non écrits et pourquoi](#tests-non-écrits-et-pourquoi)
+[Score mutation final](#score-mutation-final)
+[Mutants Equivalents](#mutants-equivalents)
+
 ## Scores initiaux
 
 **Avant refactoring:**     
@@ -96,7 +106,7 @@ Un pion pouvait manger un adversaire devant lui. J'ai réparé le bug en remplac
 "s notNil and: [ s hasPiece not or: [ s contents color ~= color ]]" par "s notNil and: [ s hasPiece not]"       
 
 
-## Les tests que je choisis d'écrire  
+## Les tests que j'ai choisis d'écrire  
 
 Soit l'analyze des tests à effectuer. Je vais m'appuyer à la fois sur les mutants que j'ai choisis de tester, et la     
 stratégie pour tuer les mutants que j'ai choisis dans "Strategie Elimination mutant / Choix des Mutants à tuer". 
