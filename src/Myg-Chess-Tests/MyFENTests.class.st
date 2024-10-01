@@ -1,12 +1,12 @@
 Class {
-	#name : 'MyFENTest',
+	#name : 'MyFENTests',
 	#superclass : 'TestCase',
 	#category : 'Myg-Chess-Tests',
 	#package : 'Myg-Chess-Tests'
 }
 
 { #category : 'tests' }
-MyFENTest >> testParseBlackPawn [
+MyFENTests >> testParseBlackPawn [
 
 	| parser piece |
 	parser := MyFENParser forString: 'p'.
@@ -16,7 +16,7 @@ MyFENTest >> testParseBlackPawn [
 ]
 
 { #category : 'tests' }
-MyFENTest >> testParseRank [
+MyFENTests >> testParseRank [
 
 	| parser rank |
 	parser := MyFENParser forString: 'p2rQknB'.
@@ -34,7 +34,7 @@ MyFENTest >> testParseRank [
 ]
 
 { #category : 'tests' }
-MyFENTest >> testParseWhitePawn [
+MyFENTests >> testParseWhitePawn [
 
 	| parser piece |
 	parser := MyFENParser forString: 'P'.
