@@ -123,9 +123,9 @@ Et après nouveau soucis. Faire ainsi avec le code initial revient à avoir 2 ta
 
 ## Refactoring sur MyPawn >> targetSquaresLegal
 
-Comme je vais devoir tester les pions qui sont au départ bugué, j'en ai profité pour corriger une partie du code.     
-Les mutants ne pouvant pas être tué avec des tests initialement jaunes. Il y a bien sur plusieurs bugs sur les pions   
-mais j'ai réparé le plus flagrant.   
+Comme je vais devoir tester les pions qui sont au départ bugués, j'en ai profité pour corriger une partie du code.     
+Les mutants ne pouvant pas être tués avec des tests initialement jaunes. Il y a bien sur plusieurs bugs sur les pions   
+mais j'ai réparé le bug le plus flagrant.   
 
 Un pion pouvait manger un adversaire devant lui. J'ai réparé le bug en remplacant dans MyPawn >> targetSquaresLegal     
 "s notNil and: [ s hasPiece not or: [ s contents color ~= color ]]" par "s notNil and: [ s hasPiece not]"       
@@ -138,11 +138,11 @@ stratégie pour tuer les mutants que j'ai choisis dans "Strategie Elimination mu
 
 Déjà beaucoup de mutation concerne "MyChessBoard>>#initializePiece". J'ai regardé le code, et on voit qu'il s'agit     
 d'initialiser beaucoup de pièces. Comme l'on peut aussi initialiser un échequier avec une FEN, je vais faire     
-ce que l'on appelle un "test différentiel". J'initialise des échequier de 2 façons, et regarde si les résultats sont   
+ce que l'on appelle un "test différentiel". J'initialise des échequier de 2 façons, et je regarde si les résultats sont   
 identiques.          
 
 Concernant les 2 autres tests cela va être du test de mouvement simple comme effectué en Task1.    
-Il va falloir trouver des cas précis à trouver, et tester les cases ou l'on peut aller. Selon qu'il y a un opposant,    
+Il va falloir trouver des cas précis à trouver, et tester les cases où l'on peut aller. Selon qu'il y a un opposant,    
 qu'il n'y a pas d'opposant, que l'on soit au bord du plateau...    
 
 **Les tests que je choisis d'implémenter vont donc être:**     
@@ -168,10 +168,11 @@ Les tests étaient soit rouges, soit jaunes après modification. Pari réussi.
 
 ## Tests non écrits et pourquoi    
 
-Déjà je n'ai écris aucun test vérifiant les performances avec un timeout pour les fonctions.    
 
+Déjà je n'ai écris aucun tests vérifiant les performances pour les fonctions de base.    
+Car savoir qu'elle est une performance convenable est toujours très dur.   
 
-De plus, je n'ai pas écrit de tests pour lequels peu de mutants ont survécu, car j'ai effectué ce que l'on appelle    
+De plus, je n'ai pas écrit de tests pour lequels peu de mutants ont survécus, car j'ai effectué ce que l'on appelle    
 des "tests guidés" en l'occurence des tests guidés par le score de mutation.    
 
 Cela est cohérent avec l'exercice demandé.    
@@ -197,8 +198,8 @@ de supprimer les tests > 0.019s. Sinon mon test "differential testing" était ig
 
 **Conclusion:** Le score de mutation est nettemenent supérieur au début de 37 à 64%, alors que le taux de    
 couverture est juste passé de 54.61% à 67.97%. Cela est du surtout au test "MyChessBoardTests >> testInitPieces"    
-qui test MyChessBoard >> InitializePieces.    
-J'en déduit personnelement que cela montre un attrait spécifique du module de mutation pour certaines fonctions.   
+qui teste MyChessBoard >> InitializePieces.    
+J'en déduis personnelement que cela montre un attrait spécifique du module de mutation pour certaines fonctions.   
 
 
 ## Mutants Equivalents    
@@ -206,8 +207,8 @@ J'en déduit personnelement que cela montre un attrait spécifique du module de 
 J'avais trouvé 2 mutants graphiques qui pour moi étaient équivalents, changement de paramètres graphiques de 20 à 21, ou     
 de 48 à 49. Mais j'ai cru comprendre que cela n'était pas vraiment des mutants équivalents pour le professeur.    
 
-Je n'ai trouvé aucun mutant équivalent côté logique / backend.     
-Je montre quand même pas des petits exemple pour montrer que j'ai cherché. Et que j'ai fais les tables de logique avec    
+Je n'ai trouvé aucun mutants équivalents côté logique / backend.     
+Je montre quand même des petits exemples pour montrer que j'ai cherché. Et que j'ai fais les tables de logique avec    
 du or / bXor , and / bEqv.     
 
 
