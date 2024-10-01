@@ -135,18 +135,17 @@ Soit l'analyze des tests à effectuer. Je vais m'appuyer à la fois sur les muta
 stratégie pour tuer les mutants que j'ai choisis dans "Strategie Elimination mutant / Choix des Mutants à tuer". 
 
 Déjà beaucoup de mutation concerne "MyChessBoard>>#initializePiece". J'ai regardé le code, et on voit qu'il s'agit     
-d'initialiser beaucoup de pièces. Comme l'on peut aussi initialiser un échequier avec une FEN, je vais juste faire     
-ce que l'on appelle un "test différentiel". J'initialise un echequier avec "initialize Piece", un avec une stringFEN.        
-Et je compare si les 2 échequiers sont identiques en termes de comportement.         
+d'initialiser beaucoup de pièces. Comme l'on peut aussi initialiser un échequier avec une FEN, je vais faire     
+ce que l'on appelle un "test différentiel". J'initialize les échequier de 2 façons, et regarde si les résultats sont   
+identiques.          
 
 Concernant les 2 autres tests cela va être du test de mouvement simple comme effectué en Task1.    
 Il va falloir trouver des cas précis à trouver, et tester les cases ou l'on peut aller. Selon qu'il y a un opposant, qu'il   
 n'y a pas d'opposant, que l'on soit au bord du plateau...    
 
 **Les tests que je choisis d'implémenter vont donc être:**     
-- Test différentiel entre une initialisation avec MyChessBoard>>#initializePiece et MyChessGame >> FromFENString:    
-   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' auquel je demande l'attribut board. Je vérifie que les   
-    2 sont égaux.    
+- Test différentiel entre MyChessBoard>>#initializePiece et MyChessGame >> FromFENString: puis demande du board.    
+      Je regarde si les 2 fonctions renvoient des board identiques.    
 - Test des mouvement d'un cavalier en bord de plateau   
 - Test qu'un cavalier ne peut pas manger un pion allié    
 - un pion noir avance d'une case en bas   
@@ -273,11 +272,22 @@ L'on voit que le mutant n'est pas équivalent.
 
 **TODO** Bon j'ai réussi enfin à appeller initializePieces.
 J'ai crée un constructeur. Et ensuite en dessous j'explique l'horreur de tester l'id !!
+Et en dessous je fais l'appel depuis un Game.
 
 |board p|
 	board := MyChessBoard initPieces.
 	p := board at:'h7'.
 	(p contents) id.
+
+	------------- 
+
+|game board p|
+
+	game := MyChessGame fromFENString: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'.
+	board := game board.
+	p := board at:'h7'.
+	(p contents) id.
+
 
 
 **TO DO** J'ai 3 TODO en haut. Les faires. 2 sont pour écrire des tests.    
