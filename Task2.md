@@ -88,7 +88,7 @@ uniquement sur les 3 fonctions restantes. 267 mutants sur plus de 600 encore viv
 **Les mutants choisis pour être tués spécifiquement:**    
 
 **"2 Convert a literal string to emptyString in MyChessBoard>>#initializePiece"**    
-    Au lieu de mettre MyKing White en 'e1' l'on met '' en e1    
+    Au lieu de mettre MyKing White en 'e1' l'on met MyKing en ''    
 
 **"12 Replace #or: with true in MyKnight>>#targetSquaresLegal:"**    
     Au lieu de select: [ :s | s notNil and: [ s hasPiece not or: [ s contents color ~= color ] ] ] cela est remplacé par   
