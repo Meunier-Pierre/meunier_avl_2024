@@ -2,11 +2,18 @@
 
 # Task 2 : Mutation Testing    
 
-## Obtention des scores initiaux    
+## Scores initiaux
 
-Pour obtenir les scores initiaux, j'ai effectué le test suivant.   
-En plus des optimisations usuelles, j'ai demandé à effectuer le test sur 3 minutes.    
-J'ai cherché certaines méthodes en analysant l'objet "MTAnalysis" et en regardant l'onglet Meta.    
+**Avant refactoring:**     
+
+Taux de couverture: 54.61 % pour le package "Myg-Chess-Core".     
+Score de mutation: 37%                     
+Chance que un mutant couvert soit tué:  37 / 54.61 soit 67.8 %
+
+**Obtention du score:**
+
+Pour obtenir le score de mutation, j'ai effectué le test suivant.   
+En plus des optimisations usuelles, j'ai demandé à effectuer le test sur 3 minutes.     
 
 ```
 
@@ -24,29 +31,11 @@ analysis run.
 analysis generalResult mutationScore.   
 ```
 
-Pour obtenir les mutants survivants j'effectue presque le même code.     
-Seule la dernière ligne est modifiée en "analysis generalResult."    
+Pour obtenir les mutants survivants l'on peut remplacer la dernière ligne par "analysis generalResult."    
 
 
-## Scores mutation initial 
 
-En plus du score de mutation, je vais indiquer les taux de coverage. Et cela car un taux de     
-mutation très éloigné du taux de coverage indique souvent un soucis, car dans le test les      
-assertions ne sont pas assez fines.    
-
-Je vais effectuer les tests sur mon code refactoré pour le kata "Restrict legal moves".           
-
-**Score initial:**     
-
-Taux de couverture: 54.61 % pour le package "Myg-Chess-Core".     
-Score de mutation: 37%                     
-Chance que un mutant couvert soit tué:  37 / 54.61 soit 67.8 %
-
-Note: Comme le TP fourni un jeu volontairement bugué, et que j'ai 3 tests "yellow", car le    
-refactoring total était compliqué, cela baisse aussi les chances de tuer un mutant couvert.   
-
-
-## Strategie Elimination mutant     
+## Strategie Elimination mutant / Choix des Mutants à tuer    
 
 La strategie que je vais suivre pour améliorer le score de mutation va être de grouper les  mutants survivants     
 par méthode mutée.  Je vais aussi en profiter pour diminuer les classes testées, pour tester uniquement celles     
@@ -76,77 +65,46 @@ analysis run.
 MyChessBoard >> initializePiece : 193 mutants survivants   
 MyChessSquare >> initialize : 116 mutants survivants    
 MyKnight >> targetSquaresLegal : 47 mutants survivants   
-MyPawn >> targetSquaresLegal : 39 mutants survivants avant refactoring, 27 après (6ème position)  
-MyChessBoard >> initializeFromFENBoard: 36 mutants survivants    
-MyChessBoard >> initialize: 31 mutants survivants  
-
-Après analyse, **MyChessSquare >> initialize** et **MyChessBoard >> initialize** sont du code graphique.      
-**MyChessBoard >> initializeFromFENBoard** est... un code assez spécial que je ne comprends pas.       
-Je vais donc dans la suite me concentrer uniquement sur les 3 fonctions restantes. 267 mutants sur plus    
-de 600 encore vivants.     
-
-## Refactoring sur MyPawn >> targetSquaresLegal   
-
-Bon comme visiblement je vais devoir tester les pions qui sont bugués, dont j'ai lu le code, j'en ai profité   
-pour corriger une partie du code. Les mutants ne peuvent de toute façon pas être tués quand le test initial    
-est jaune. C'est pour cela que j'ai réparé un bug, parmis plusieurs.            
-
-Le code avant était
-
-```
-targetSquaresLegal: aBoolean
-
-	^ (self isWhite
-		   ifTrue: [ { square up } ]
-		   ifFalse: [ { square down } ]) select: [ :s |
-		  s notNil and: [
-			  s hasPiece not or: [ s contents color ~= color ] ] ]
-```
-
-**Le bugs était:** Un pion pouvait manger un adversaire devant lui au lieu d'être bloqué.   
-**Réparation:**  J'ai remplacé "s notNil and: [ s hasPiece not or: [ s contents color ~= color ]]" par    
-"s notNil and: [ s hasPiece not]"     
-   
-**Influence sur le nombre de mutant survivant:** Le code étant plus simple, il y a moins de mutants générés.     
-27 mutants survivants au lieu de 39. 6ème position.    
+MyPawn >> targetSquaresLegal : 39 mutants survivants avant refactoring, 27 après (6ème position)     
+                                   Le refactoring est expliqué après.    
 
 
-## Selection de 3 mutants à tuer        
+Après analyse, **MyChessSquare >> initialize** est un code graphique. Je vais donc dans la suite me concentrer     
+uniquement sur les 3 fonctions restantes. 267 mutants sur plus de 600 encore vivants.     
 
-Suite à ma stratégie d'élimination des mutants, je vais selectionner 3 mutants à tuer dans les six fonctions avec le   
-plus de mutants survivants. Je vais évaluer que le mutant est bien tué en modifiant ensuite moi même mon code   
-comme pour la mutation, et en vérifiant que le test passe de vert à jaune.   
-
-**Les mutants que j'ai choisit de tuer:**   
-
+**Les mutants choisis pour être tués spécifiquement:**    
 
 **"2 Convert a literal string to emptyString in MyChessBoard>>#initializePiece"**    
-    Au lieu de mettre MyKing White en 'e1' l'on met '' en e1   
+    Au lieu de mettre MyKing White en 'e1' l'on met '' en e1    
 
 **"12 Replace #or: with true in MyKnight>>#targetSquaresLegal:"**    
     Au lieu de select: [ :s | s notNil and: [ s hasPiece not or: [ s contents color ~= color ] ] ] cela est remplacé par   
  select: [ :s | s notNil and: [ true ] ]    
 
 **" Remove #not in MyPawn>>#targetSquaresLegal"**    
-    Au lieu de select: select: [ :s |s notNil and: [ s hasPiece not ] ] cela est remplacé par  [ :s | s notNil and: [ 
-	s hasPiece ] ]    
+    Au lieu de select: select: [ :s |s notNil and: [ s hasPiece not ] ] cela est remplacé par  [ :s | s notNil and: [    
+	s hasPiece ] ]   
 
-Bon au vue du mutant assez grossier qui passait dans les pions, j'ai vérifié, et oui il y avait 0 tests sur le pion.    
-Ce n'était pas nécessairement dans mon Kata, mais on va réparer cela. C'est aussi la que j'ai vu que... j'allais réparer   
-légèrement le code avant de tester. Pour avoir un peu de vert.     
+
+## Refactoring sur MyPawn >> targetSquaresLegal   
+
+Comme je vais devoir tester les pions qui sont au départ bugué, j'en ai profité pour corriger une partie du code.     
+Les mutants ne pouvant pas être tué avec des tests initialement jaune. Il y a bien sur plusieurs bugs sur les pions   
+mais j'ai réparé le plus flagrant.   
+
+Un pion pouvait manger un adversaire devant lui. J'ai réparé le bug en remplacant dans MyPawn >> targetSquaresLegal     
+"s notNil and: [ s hasPiece not or: [ s contents color ~= color ]]" par "s notNil and: [ s hasPiece not]"       
+
 
 ## Les tests que je choisis d'écrire  
 
-Alors ici cela va être le plus intéressant.    
-L'analyse de ce que je veux tester. Je vais m'appuyer à la fois sur les mutants que j'ai choisis de tester, et la stratégie   
-pour tuer les mutants que j'ai choisis dans "Strategie Elimination mutant". Et en fait je vais juste tester extensivement    
-3 fonctions qui represente 279 mutants survivants sur plus de 600.         
+Soit l'analyze des tests à effectuer. Je vais m'appuyer à la fois sur les mutants que j'ai choisis de tester, et la     
+stratégie pour tuer les mutants que j'ai choisis dans "Strategie Elimination mutant / Choix des Mutants à tuer". 
 
-Déjà une grosse partie du code est sur l'initialisation de l'echequier avec "MyChessBoard>>#initializePiece". J'ai    
-regardé le code, et on voit qu'il s'agit d'initialiser beaucoup de pièces. Cela va être façile à tester. Comme je sais que    
-l'on peut aussi initialiser un échequier avec une FEN, je vais juste faire ce que l'on appelle un "test différentiel".        
-J'initialise un echequier avec "initialize Piece", un avec une stringFEN. Et je compare si les 2 échequiers sont    
-identiques en termes de comportement.         
+Déjà beaucoup de mutation concerne "MyChessBoard>>#initializePiece". J'ai regardé le code, et on voit qu'il s'agit     
+d'initialiser beaucoup de pièces. Comme l'on peut aussi initialiser un échequier avec une FEN, je vais juste faire     
+ce que l'on appelle un "test différentiel". J'initialise un echequier avec "initialize Piece", un avec une stringFEN.        
+Et je compare si les 2 échequiers sont identiques en termes de comportement.         
 
 Concernant les 2 autres tests cela va être du test de mouvement simple comme effectué en Task1.    
 Il va falloir trouver des cas précis à trouver, et tester les cases ou l'on peut aller. Selon qu'il y a un opposant, qu'il   
