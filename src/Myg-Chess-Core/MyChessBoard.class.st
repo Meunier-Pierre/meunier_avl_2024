@@ -29,6 +29,14 @@ MyChessBoard class >> fromFENBoard: aFENBoard [
 ]
 
 { #category : 'instance creation' }
+MyChessBoard class >> initPieces [
+   
+		^ super new
+		  initializePieces;
+		  yourself
+]
+
+{ #category : 'instance creation' }
 MyChessBoard class >> new [
 
 	self error: 'Please use the other constructors'
@@ -112,7 +120,8 @@ MyChessBoard >> initialize [
 		aLayoutConstraints horizontal fitContent.
 		aLayoutConstraints vertical fitContent ].
 
-	self initializeSquares
+	self initializeSquares.
+	
 ]
 
 { #category : 'initialization' }
@@ -136,6 +145,9 @@ MyChessBoard >> initializePieces [
 
 	| black |
 	black := false.
+	
+	self removeChildren.
+	
 	$a asciiValue to: $h asciiValue do: [ :column |
 		8 to: 1 by: -1 do: [ :file |
 			| squareNotation square |

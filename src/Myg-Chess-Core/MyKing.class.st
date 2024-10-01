@@ -94,9 +94,3 @@ MyKing >> targetSquaresLegal: aBoolean [
 						"Let's hope the piece is not defended"
 						(threatenedSquares includes: s) not  ] ] ] ] ]
 ]
-
-{ #category : 'rendering' }
-MyKing >> targetSquaresLegalSimplified: aBoolean [
-
-	^ self basicTargetSquares select: [ :s | s notNil ]
-]
