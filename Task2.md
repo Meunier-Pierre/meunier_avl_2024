@@ -5,7 +5,7 @@
 ## Sommaire   
 
 [Scores initiaux](#scores-initiaux)     
-[Strategie Elimination mutant / Choix des Mutants à tuer](#strategie-elimination-mutant--choix-des-mutants-à-tuer)
+[Strategie Elimination mutant / Choix des Mutants à tuer](#strategie-elimination-mutant--choix-des-mutants-à-tuer)         
 [Refactoring appel impossible, MyChessBoard >> initializePiece](#refactoring-appel-impossible-mychessboard--initializepiece)    
 [Refactoring sur MyPawn >> targetSquaresLegal](#refactoring-sur-mypawn--targetsquareslegal)      
 [Les tests que j'ai choisis d'écrire](#les-tests-que-jai-choisis-décrire)      
