@@ -272,12 +272,12 @@ L'on voit que le mutant n'est pas équivalent.
 -----------------
 
 **TODO** Bon j'ai réussi enfin à appeller initializePieces.
-J'ai crée un constructeur. Et ensuite.  
+J'ai crée un constructeur. Et ensuite en dessous j'explique l'horreur de tester l'id !!
 
-|board parser|
+|board p|
 	board := MyChessBoard initPieces.
-	board at: 'e4'.
-
+	p := board at:'h7'.
+	(p contents) id.
 
 
 **TO DO** J'ai 3 TODO en haut. Les faires. 2 sont pour écrire des tests.    
