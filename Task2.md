@@ -96,11 +96,30 @@ uniquement sur les 3 fonctions restantes. 267 mutants sur plus de 600 encore viv
 	s hasPiece ] ]   
 
 
-## Refactoring sur MyPawn >> targetSquaresLegal et MyChessBoard >> initialize 
+## Refactoring appel impossible, MyChessBoard >> initializePiece    
 
 Comme je dois tester la méthode MyChessBoard >> initializePieces j'ai du essayer de l'appeller, et je me suis rendu   
-compte que je ne pouvais pas l'appeller, et que de plus elle n'était appellée dans aucune fonction. J'ai donc modifié  
-le code de MyChessBoard >> initialize pour appeller cette méthode. 
+compte que son appel est bloqué, car les fonctions inialization ne peuvent appeller que dans un constructeur. Un appel   
+très spécial. Et cette fonction la n'était jamais appellée par aucun constructeur. Cela ne serait pas la définition   
+d'un code mort ?     
+
+Cependant j'ai passé 3h sur ce problème. Cela était un niveau technique élevé je pense.       
+Et les tests de mutation disent de tester cela. Donc réalisons les tests.    
+
+En Class side je crée la méthode initPieces pour appeller initializePieces.      
+
+```
+initPieces
+   
+		^ super new
+		  initializePieces;
+		  yourself
+```
+
+Pour résoudre le soucis d'avoir 2 tableaux avec cette méthode, ensuite dans MyChessBoard >> initializePiece j'ai ajouté    
+au tout début un appel à une méthode de BlElement "self removeChildren."    
+
+## Refactoring sur MyPawn >> targetSquaresLegal
 
 Comme je vais devoir tester les pions qui sont au départ bugué, j'en ai profité pour corriger une partie du code.     
 Les mutants ne pouvant pas être tué avec des tests initialement jaune. Il y a bien sur plusieurs bugs sur les pions   
@@ -252,13 +271,13 @@ L'on voit que le mutant n'est pas équivalent.
 
 -----------------
 
-**TODO** Bon en vrai après test je vais être obligé d'abandonner l'idée "différential testing".
-              Juste voir à faire du test en paquet avec un tableau en demande id sur les pièces.
+**TODO** Bon j'ai réussi enfin à appeller initializePieces.
+J'ai crée un constructeur. Et ensuite.  
 
-**HYPER-IMPORTANT** Bien rapeller InitializePiece dans le Initialize, ou il ne sera jamais testé.
+|board parser|
+	board := MyChessBoard initPieces.
+	board at: 'e4'.
 
-   |board parser|
-	board := MyChessBoard initialize. 
 
 
 **TO DO** J'ai 3 TODO en haut. Les faires. 2 sont pour écrire des tests.    
