@@ -5,7 +5,8 @@
 ## Sommaire   
 
 [Scores initiaux](#scores-initiaux)     
-[Strategie Elimination mutant / Choix des Mutants à tuer](#strategie-elimination-mutant--choix-des-mutants-à-tuer)       
+[Strategie Elimination mutant / Choix des Mutants à tuer](#strategie-elimination-mutant--choix-des-mutants-à-tuer)
+[Refactoring appel impossible, MyChessBoard >> initializePiece](#refactoring-appel-impossible-mychessboard--initializepiece)
 [Refactoring sur MyPawn >> targetSquaresLegal](#refactoring-sur-mypawn--targetsquareslegal)      
 [Les tests que j'ai choisis d'écrire](#les-tests-que-jai-choisis-décrire)      
 [Tests non écrits et pourquoi](#tests-non-écrits-et-pourquoi)      
@@ -14,7 +15,7 @@
 
 ## Scores initiaux
 
-**Avant refactoring:**     
+**Avant ajout de tests:**     
 
 Taux de couverture: 54.61 % pour le package "Myg-Chess-Core".     
 Score de mutation: 37%                     
@@ -23,7 +24,8 @@ Chance que un mutant couvert soit tué:  37 / 54.61 soit 67.8 %
 **Obtention du score:**
 
 Pour obtenir le score de mutation, j'ai effectué le test suivant.   
-En plus des optimisations usuelles, j'ai demandé à effectuer le test sur 3 minutes.     
+Un seul point **HYPER-IMPORTANT** j'ai modifié le testFilter afin de ne plus ignore les 10% de tests les plus    
+lents. Sinon après écriture de tests, mon test le plus efficace, un test différentiel, était ignoré car > 0.019s.       
 
 ```
 
@@ -32,9 +34,10 @@ packagesToMutate := {'Myg-Chess-Core'}.
 
 analysis := MTAnalysis new
     testPackages: testPackages;
-    packagesToMutate:  packagesToMutate;
+    classesToMutate: classesToMutate;
     testSelectionStrategy: MTSelectingFromCoverageTestSelectionStrategy new;
     stopOnErrorOrFail: true;
+    testFilter: MTRedTestFilter new;
     budget: (MTTimeBudget for: 3 minutes).
 
 analysis run.
@@ -96,17 +99,15 @@ uniquement sur les 3 fonctions restantes. 267 mutants sur plus de 600 encore viv
 	s hasPiece ] ]   
 
 
-## Refactoring appel impossible, MyChessBoard >> initializePiece    
+## Refactoring appel impossible, MyChessBoard >> initializePiece
 
 Comme je dois tester la méthode MyChessBoard >> initializePieces j'ai du essayer de l'appeller, et je me suis rendu   
-compte que son appel est bloqué, car les fonctions inialization ne peuvent appeller que dans un constructeur. Un appel   
-très spécial. Et cette fonction la n'était jamais appellée par aucun constructeur. Cela ne serait pas la définition   
-d'un code mort ?     
+compte que son appel est bloqué, car les fonctions inialization ne peuvent être appellées que dans un constructeur. Un     
+appel très spécial. Et cette fonction la n'était jamais appellée par aucun constructeur. Cela ne serait pas la     
+définition d'un code mort ?     
 
-Cependant j'ai passé 3h sur ce problème. Cela était un niveau technique élevé je pense.       
-Et les tests de mutation disent de tester cela. Donc réalisons les tests.    
-
-En Class side je crée la méthode initPieces pour appeller initializePieces.      
+Cependant j'ai passé 3h sur le problème de comment appeller la méthode. Les tests de mutation disent que cette méthode   
+est hyper importante. Bref, j'ai crée le constructeur  MyChessBoard >> initPieces pour appeler cette fonction.    
 
 ```
 initPieces
@@ -116,13 +117,14 @@ initPieces
 		  yourself
 ```
 
-Pour résoudre le soucis d'avoir 2 tableaux avec cette méthode, ensuite dans MyChessBoard >> initializePiece j'ai ajouté    
-au tout début un appel à une méthode de BlElement "self removeChildren."    
+Et après nouveau soucis. Faire ainsi avec le code initial revient à avoir 2 tableaux au niveau des BlElements, les     
+éléments graphiques. Bref, j'ai modifié le code initial, et j'ai appellé une méthode de BlElement "self removeChildren."    
+
 
 ## Refactoring sur MyPawn >> targetSquaresLegal
 
 Comme je vais devoir tester les pions qui sont au départ bugué, j'en ai profité pour corriger une partie du code.     
-Les mutants ne pouvant pas être tué avec des tests initialement jaune. Il y a bien sur plusieurs bugs sur les pions   
+Les mutants ne pouvant pas être tué avec des tests initialement jaunes. Il y a bien sur plusieurs bugs sur les pions   
 mais j'ai réparé le plus flagrant.   
 
 Un pion pouvait manger un adversaire devant lui. J'ai réparé le bug en remplacant dans MyPawn >> targetSquaresLegal     
@@ -136,32 +138,32 @@ stratégie pour tuer les mutants que j'ai choisis dans "Strategie Elimination mu
 
 Déjà beaucoup de mutation concerne "MyChessBoard>>#initializePiece". J'ai regardé le code, et on voit qu'il s'agit     
 d'initialiser beaucoup de pièces. Comme l'on peut aussi initialiser un échequier avec une FEN, je vais faire     
-ce que l'on appelle un "test différentiel". J'initialize les échequier de 2 façons, et regarde si les résultats sont   
+ce que l'on appelle un "test différentiel". J'initialise des échequier de 2 façons, et regarde si les résultats sont   
 identiques.          
 
 Concernant les 2 autres tests cela va être du test de mouvement simple comme effectué en Task1.    
-Il va falloir trouver des cas précis à trouver, et tester les cases ou l'on peut aller. Selon qu'il y a un opposant, qu'il   
-n'y a pas d'opposant, que l'on soit au bord du plateau...    
+Il va falloir trouver des cas précis à trouver, et tester les cases ou l'on peut aller. Selon qu'il y a un opposant,    
+qu'il n'y a pas d'opposant, que l'on soit au bord du plateau...    
 
 **Les tests que je choisis d'implémenter vont donc être:**     
-- Test différentiel entre MyChessBoard>>#initializePiece et MyChessGame >> FromFENString: puis demande du board.    
-      Je regarde si les 2 fonctions renvoient des board identiques.    
+- Test différentiel entre MyChessBoard>>#initializePiece et le board de MyChessGame >> FromFENString:    
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' . Je regarde si les 2 fonctions renvoient des boards  
+	   identiques.    
 - Test des mouvement d'un cavalier en bord de plateau   
 - Test qu'un cavalier ne peut pas manger un pion allié    
 - un pion noir avance d'une case en bas   
 - un pion blanc avec une tour noir devant ne peut pas avancer    
+  
 
-J'ai écris les tests.     
+**Les tests ont été implémentés:**    
+- MyChessBoardTests >> testInitPieces     
+- MyKnightTests >> testMovesAtBorder      
+- MyKnightTests >> testMovesWithSameColorObstacle    
+- MyPawnTests >> testMoves
+- MyPawnTests >> testMovesWithOponentObstacle   
 
-**Les nom dans mon code sont:**      
-
-**TODO : Ecrire le nom des fonctions** 
-
-
-Après tests les mutants sont bien tués.    
-Il est maintenant temps de vérifier les nouveaux scores de mutation et de couverture.    
-
-**TODO: Vérifier que les mutants sont bien tués**
+J'ai vérifié que les mutants choisis sont tués en introduisant les mutations à la main.    
+Les tests étaient soit rouges, soit jaunes après modification. Pari réussi.       
 
 
 ## Tests non écrits et pourquoi    
@@ -183,7 +185,20 @@ le même CA dans la base de donnée destinataire". Véridique.
 
 ## Score mutation final
 
-**TODO ecrire score mutation final**
+
+Je refais les mêmes tests que au début, donc aussi en reprenant tout le package "Myg-Chess-Core".    
+Bien que comme j'ai vu il y a aussi en fait pas mal de code graphique.   
+
+**Taux de couverture:** 67.97 % pour le package "Myg-Chess-Core".     
+**Score de mutation:** 64%. 
+**Important:** Je suis passé de 49% à 64% de score de mutation en... Modifiant le test filter pour empecher   
+de supprimer les tests > 0.019s. Sinon mon test "differential testing" était ignoré. Et il était efficace.      
+
+
+**Conclusion:** Le score de mutation est nettemenent supérieur au début de 37 à 64%, alors que le taux de    
+couverture est juste passé de 54.61% à 67.97%. Cela est du surtout au test "MyChessBoardTests >> testInitPieces"    
+qui test MyChessBoard >> InitializePieces.    
+J'en déduit personnelement que cela montre un attrait spécifique du module de mutation pour certaines fonctions.   
 
 
 ## Mutants Equivalents    
@@ -266,31 +281,3 @@ L'on voit que le mutant n'est pas équivalent.
 | Après mutation   |            VRAI          |            FAUX                |      FAUX               |          VRAI              |
 
 
-
-
------------------
-
-**TODO** Bon j'ai réussi enfin à appeller initializePieces.
-J'ai crée un constructeur. Et ensuite en dessous j'explique l'horreur de tester l'id !!
-Et en dessous je fais l'appel depuis un Game.
-
-|board p|
-	board := MyChessBoard initPieces.
-	p := board at:'h7'.
-	(p contents) id.
-
-	------------- 
-
-|game board p|
-
-	game := MyChessGame fromFENString: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'.
-	board := game board.
-	p := board at:'h7'.
-	(p contents) id.
-
-
-
-**TO DO** J'ai 3 TODO en haut. Les faires. 2 sont pour écrire des tests.    
-Et 1 est pour le truc hyper important de dire les scores coverage / mutation finaux !!      
-
------------------
