@@ -4,13 +4,13 @@
 
 ## Sommaire   
 
-[Scores initiaux](#scores-initiaux)
-[Strategie Elimination mutant / Choix des Mutants à tuer](#strategie-elimination-mutant--choix-des-mutants-à-tuer)
-[Refactoring sur MyPawn >> targetSquaresLegal](#refactoring-sur-mypawn--targetsquareslegal)
-[Les tests que j'ai choisis d'écrire](#les-tests-que-jai-choisis-décrire)
-[Tests non écrits et pourquoi](#tests-non-écrits-et-pourquoi)
-[Score mutation final](#score-mutation-final)
-[Mutants Equivalents](#mutants-equivalents)
+[Scores initiaux](#scores-initiaux)     
+[Strategie Elimination mutant / Choix des Mutants à tuer](#strategie-elimination-mutant--choix-des-mutants-à-tuer)       
+[Refactoring sur MyPawn >> targetSquaresLegal](#refactoring-sur-mypawn--targetsquareslegal)      
+[Les tests que j'ai choisis d'écrire](#les-tests-que-jai-choisis-décrire)      
+[Tests non écrits et pourquoi](#tests-non-écrits-et-pourquoi)      
+[Score mutation final](#score-mutation-final)     
+[Mutants Equivalents](#mutants-equivalents)     
 
 ## Scores initiaux
 
