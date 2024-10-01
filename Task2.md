@@ -96,7 +96,11 @@ uniquement sur les 3 fonctions restantes. 267 mutants sur plus de 600 encore viv
 	s hasPiece ] ]   
 
 
-## Refactoring sur MyPawn >> targetSquaresLegal   
+## Refactoring sur MyPawn >> targetSquaresLegal et MyChessBoard >> initialize 
+
+Comme je dois tester la méthode MyChessBoard >> initializePieces j'ai du essayer de l'appeller, et je me suis rendu   
+compte que je ne pouvais pas l'appeller, et que de plus elle n'était appellée dans aucune fonction. J'ai donc modifié  
+le code de MyChessBoard >> initialize pour appeller cette méthode. 
 
 Comme je vais devoir tester les pions qui sont au départ bugué, j'en ai profité pour corriger une partie du code.     
 Les mutants ne pouvant pas être tué avec des tests initialement jaune. Il y a bien sur plusieurs bugs sur les pions   
@@ -247,6 +251,15 @@ L'on voit que le mutant n'est pas équivalent.
 
 
 -----------------
+
+**TODO** Bon en vrai après test je vais être obligé d'abandonner l'idée "différential testing".
+              Juste voir à faire du test en paquet avec un tableau en demande id sur les pièces.
+
+**HYPER-IMPORTANT** Bien rapeller InitializePiece dans le Initialize, ou il ne sera jamais testé.
+
+   |board parser|
+	board := MyChessBoard initialize. 
+
 
 **TO DO** J'ai 3 TODO en haut. Les faires. 2 sont pour écrire des tests.    
 Et 1 est pour le truc hyper important de dire les scores coverage / mutation finaux !!      
