@@ -190,7 +190,7 @@ Je refais les mêmes tests que au début, donc aussi en reprenant tout le packag
 Bien que comme j'ai vu il y a aussi en fait pas mal de code graphique.   
 
 **Taux de couverture:** 67.97 % pour le package "Myg-Chess-Core".     
-**Score de mutation:** 64%. 
+**Score de mutation:** 64%.      
 **Important:** Je suis passé de 49% à 64% de score de mutation en... Modifiant le test filter pour empecher   
 de supprimer les tests > 0.019s. Sinon mon test "differential testing" était ignoré. Et il était efficace.      
 
