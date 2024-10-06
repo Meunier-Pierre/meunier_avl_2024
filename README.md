@@ -97,10 +97,7 @@ Questions and ideas that can help you in the process:
 - What tools help you finding the right place to put this new code?
 - How do you avoid repeating all the existing code computing legal moves and checks?
 
-# Note Etudiant a Moi Meme   
-
-Mettre les tags, faire les practises, écrire les réponses dans Task1.md, Task2.md... Ne pas aller plus loin    
-au MOOC, car j'ai déjà vu pas mal de Syntaxe. Et le TP est long.   
+ 
  
 
 
