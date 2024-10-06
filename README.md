@@ -32,7 +32,9 @@ Les réponses du TP1 sont écrits dans ces fichiers
 
 Task1 finie.   
 
-Task2 en cours.   
+Task2 finie.
+
+Task3 en cours.
 
 # Import du projet     
 
