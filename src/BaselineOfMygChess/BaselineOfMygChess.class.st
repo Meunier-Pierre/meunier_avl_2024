@@ -24,5 +24,5 @@ BaselineOfMygChess >> baseline: spec [
 		package: 'Myg-Chess-Tests'
 		with: [ spec requires: #( 'Myg-Chess-Core' ) ];
 		package: 'Myg-Chess-Fuzzer';
-		package: 'Phuzzer';
+		package: 'Phuzzer'
 ]
