@@ -27,6 +27,7 @@ https://github.com/avl-univ-lille/testing/blob/2024/agenda.md
 Les réponses du TP1 sont écrits dans ces fichiers     
 [Task1.md](./Task1.md)  
 [Task2.md](./Task2.md)  
+[Task3.md](./Task3.md)  
 
 # Avancement    
 
