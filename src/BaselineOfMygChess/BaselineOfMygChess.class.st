@@ -20,7 +20,7 @@ BaselineOfMygChess >> baseline: spec [
 	spec
 		baseline : 'Phuzzer'
 		with: [ spec repository: 'github://plantec/Toplo:main/src' ].
-
+	
 	spec
 		package: 'Myg-Chess-Core'
 		with: [ spec requires: #( 'Myg-Chess-Importers' ) ];
