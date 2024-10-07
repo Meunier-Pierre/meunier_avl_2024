@@ -49,9 +49,16 @@ Metacello new
 	load.
 ```
 
-vous pouvez ensuite importer de quoi faire les tests de mutation avec   
+vous pouvez ensuite importer de quoi faire les Fuzzer et les tests de mutation avec   
 
 ```
+Metacello new
+  baseline: 'Phuzzer';
+  repository: 'github://alamvic/phuzzer:main';
+  onConflictUseIncoming;
+  load.
+
+
 Deprecation activateTransformations: false.
 Metacello new
   baseline: 'MuTalk';
