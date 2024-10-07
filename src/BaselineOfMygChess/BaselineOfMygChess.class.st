@@ -18,7 +18,7 @@ BaselineOfMygChess >> baseline: spec [
 		with: [ spec repository: 'github://plantec/Toplo:v0.1.0/src' ].
 	
 	spec
-		baseline : 'Phuzzer'
+		baseline: 'Phuzzer'
 		with: [ spec repository: 'github://alamvic/phuzzer:main/src' ].
 
 	spec
