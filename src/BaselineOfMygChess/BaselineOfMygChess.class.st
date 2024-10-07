@@ -16,6 +16,10 @@ BaselineOfMygChess >> baseline: spec [
 	spec
 		baseline: 'Toplo'
 		with: [ spec repository: 'github://plantec/Toplo:v0.1.0/src' ].
+	
+	spec
+		baseline: 'Phuzzer'
+		with: [ spec repository: 'github://alamvic/phuzzer/src' ].
 
 	spec
 		package: 'Myg-Chess-Core'
