@@ -62,6 +62,12 @@ MyChessGame >> checkForMate [
 	blackPlayer king isCheckMated ifTrue: [ self halt: 'White wins!' ].
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> currentPlayer [
+	
+	^ currentPlayer
+]
+
 { #category : 'initialization' }
 MyChessGame >> initialize [
 
