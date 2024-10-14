@@ -9,33 +9,23 @@ Année 2024-2025
 
 # Sujet    
 
-Le sujet de ce TP est disponible en 3 endroits.     
+Le sujet de ce TP est disponible en 2 endroits.     
 L'un est les katas   
 
-[kata.md](./kata.md)   
+[doc/kata.md](./doc/kata.md)   
 
-L'autre est le sujet de TP   
+L'autre est le sujet de TP et les tags       
 
 https://github.com/avl-univ-lille/testing/blob/2024/tp.md   
-
-Et l'agenda de la note, et les TAG à écrire sont notés à    
-
-https://github.com/avl-univ-lille/testing/blob/2024/agenda.md    
 
 # Reponse    
 
 Les réponses du TP1 sont écrits dans ces fichiers     
-[Task1.md](./Task1.md)  
-[Task2.md](./Task2.md)  
-[Task3.md](./Task3.md)  
+      
+[doc/Task1.md](./doc/Task1.md)  
+[doc/Task2.md](./doc/Task2.md)  
+[doc/Task3.md](./doc/Task3.md)  
 
-# Avancement    
-
-Task1 finie.   
-
-Task2 finie.
-
-Task3 en cours.
 
 # Import du projet     
 
@@ -50,16 +40,9 @@ Metacello new
 	load.
 ```
 
-vous pouvez ensuite importer de quoi faire les Fuzzer et les tests de mutation avec   
+vous pouvez ensuite importer de quoi faire les tests de mutation avec   
 
 ```
-Metacello new
-  baseline: 'Phuzzer';
-  repository: 'github://alamvic/phuzzer:main';
-  onConflictUseIncoming;
-  load.
-
-
 Deprecation activateTransformations: false.
 Metacello new
   baseline: 'MuTalk';

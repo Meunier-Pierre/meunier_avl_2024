@@ -44,7 +44,7 @@ L'on écrit b pour dire que cela est le tour du joueur Black / Noir.
 
 La grammaire étant très particulière, j'ai préféré faire ma propre classe pour implementer ma grammaire, plutôt    
 qu'étendre GncBaseGrammar. Sinon il était par exemple dur de limiter à 2 fous noir, ou de garder 8 cases par rangées   
-lorsque l'on mele nombre de case vide et pieces.  
+lorsque l'on mele nombre de cases vides et pieces.  
 
 Il me fallait cependant étendre un Fuzzer pour utiliser les méthodes habituels des Fuzzer, et des Runners.      
 J'ai utilisé le code suivant pour créer une classe MyFENFuzzer en package "Myg-Chess-Fuzzer" , puis après j'ai  
@@ -63,7 +63,7 @@ L'idée simple de ma méthode fuzz pour générer la 1er partie de la string qui
 - Le caractère ' ' est aussi compté comme une pièce    
 
 Le code de la méthode fuzz est le suivant. Notons que j'ai aussi crée une méthode "FENspaceToNumber: aString"   
-qui remplace les espace par des nombres, mais son code étant plus simple je ne montre pas ce code en ici.         
+qui remplace les espace par des nombres, mais son code étant plus simple je ne montre pas spécifiquement son code.            
 
 
 ```
@@ -108,10 +108,48 @@ fuzz
 
 Le but de l'exercice va être de trouver des erreurs à l'aide de chaines FEN.    
 
-Pour cela l'on peut déjà faire un premier test simple, qui est de vérifier cela avec une chaine normal, puis une anormale.   
-Et cela même sans Fuzzer quand l'on y réfléchie.  Donc autant aller vite dans le vif du sujet, pour trouver le plus de bugs   
-le plus vite possible.         
+Pour cela l'on peut déjà faire un premier test simple, qui est de vérifier la bonne execution de la méthode avec un   
+testOracle. Et cela et bien uniquement avec 2-3 chaines réalisées par notre Fuzzer que nous avons déjà. Les mutations   
+n'étant pas indispensable pour les testsOracle. On trouvera peut-être moins de bug juste.       
 
+J'ai choisis de créer la classe MyFENOracle:     
+	- Qui teste une classe ayant les fonctions "fromFENString: aString", "board" et "currentPlayer"   
+	- Pour une chaine FEN donné renvoit nil si la réponse de la classe est conforme au testOracle, une chaine de caractere   
+	      décrivant l'erreur sinon.   
+	- Le test Oracle implémenté est un testDifférentiel, en gros MyFENOracle parse la chaine, et compare son résultat à celui   
+	      fourni par la classe testé.    
+	- Les seuls tests effectués actuellement sont "Couleur joueur courant" "Couleur des pièces" "Id des pièces"    
+    - Pour la 1er version du test Oracle je vais y aller gentillement. On n'a pas encore de mutation. Je vais parser, en considérant    
+	       que la chaine donnée est forcément correcte pour simplifier le code.    
+
+En interne, pour faciliter les tests j'ai aussi créer une classe "MyFENBoard" qui comprend des messages comme "a4", et peut répondre   
+par l'id de sa pièce, ou sa couleur.    
+
+
+Je teste avec les commandes:   
+
+```
+fuzzer := MyFENFuzzer new.
+oracle := MyFENOracle new.
+oracle testedClass: MyChessGame.
+
+r := PzBlockRunner on: [ str | oracle realizeTest: str ].
+r successWith: nil.
+
+fuzzer run: r times: 1. 
+```
+
+----------------
+test du board >>
+
+board := MyFENBoard new.
+board at: 'a4' put $Q.
+
+"ET après ajouter controle id et couleur"
+
+-----------
+
+**TO DO:** Bon je suis déjà à créer la classe qui gère les a4, h5... A debuguer il y a  un soucis
 **TO DO:** Idée crée une classe qui parse, et comparer. Mais à voir en fonction de bah... comment on appelle le parsage.   
 **TO DO:** Regarder mon test en task2 > Hum... au Game je peux rendre CurrentPlayer public   
 
