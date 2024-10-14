@@ -38,7 +38,6 @@ MyFENFuzzer >> fuzz [
 	remaining := 64.
 	part1 := ''.
 	"32 piece max, 64 cases"
-	"Mettons 0 à 2 cases entre chaque piece"
 	
 	[ remaining > 0 ] whileTrue: [  
 	     i := (1 to: pieces size) atRandom.
