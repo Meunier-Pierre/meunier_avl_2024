@@ -109,15 +109,15 @@ fuzz
 Le but de l'exercice va être de trouver des erreurs à l'aide de chaines FEN.    
 
 Pour cela l'on peut déjà faire un premier test simple, qui est de vérifier la bonne execution de la méthode avec un   
-testOracle. Et cela et bien uniquement avec 2-3 chaines réalisées par notre Fuzzer que nous avons déjà. Les mutations   
-n'étant pas indispensable pour les testsOracle. On trouvera peut-être moins de bug juste.       
+testOracle. Et cela eh bien uniquement avec 2-3 chaines réalisées par notre Fuzzer que nous avons déjà. Les mutations   
+n'étant pas indispensable pour les testsOracle. On trouvera peut-être plus de bug avec les mutations juste.       
 
 J'ai choisis de créer la classe MyFENOracle:     
 	- Qui teste une classe ayant les fonctions "fromFENString: aString", "board" et "currentPlayer"   
 	- Pour une chaine FEN donné renvoit nil si la réponse de la classe est conforme au testOracle, une chaine de caractere   
 	      décrivant l'erreur sinon.   
-	- Le test Oracle implémenté est un testDifférentiel, en gros MyFENOracle parse la chaine, et compare son résultat à celui   
-	      fourni par la classe testé.    
+	- Le test Oracle implémenté est un testDifférentiel, en gros MyFENOracle parse la chaine, et compare le résultat qu'elle génère 
+			à celui fourni par la classe testé.    
 	- Les seuls tests effectués actuellement sont "Couleur joueur courant" "Couleur des pièces" "Id des pièces"    
     - Pour la 1er version du test Oracle je vais y aller gentillement. On n'a pas encore de mutation. Je vais parser, en considérant    
 	       que la chaine donnée est forcément correcte pour simplifier le code.    
@@ -142,14 +142,25 @@ fuzzer run: r times: 1.
 ----------------
 test du board >>
 
+```
 board := MyFENBoard new.
-board at: 'a4' put $Q.
+board at: 'c4' put: $Q.
+board idAt: 'c4'.
+board isWhiteAt: 'c4'.
+```
 
-"ET après ajouter controle id et couleur"
+test de number to Space 
+
+```
+oracle := MyFENOracle new.
+oracle numberToSpace: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.
+```
+
 
 -----------
 
-**TO DO:** Bon je suis déjà à créer la classe qui gère les a4, h5... A debuguer il y a  un soucis
+**TO DO:** Actuel board les fonctions sont bonnes + pour l'oracle numberToSpace j'ai vérifié et cela fonctionne.    
+              On peut commencer le parsage.        
 **TO DO:** Idée crée une classe qui parse, et comparer. Mais à voir en fonction de bah... comment on appelle le parsage.   
 **TO DO:** Regarder mon test en task2 > Hum... au Game je peux rendre CurrentPlayer public   
 
