@@ -2,7 +2,8 @@ Class {
 	#name : 'MyFENBoard',
 	#superclass : 'Object',
 	#instVars : [
-		'board'
+		'board',
+		'isPlayerWhite'
 	],
 	#category : 'Myg-Chess-Fuzzer',
 	#package : 'Myg-Chess-Fuzzer'
@@ -25,11 +26,8 @@ MyFENBoard >> at: pos put: value [
 	1 to: 8 do: [ :e | 
 		(tab2 at: e) = (pos at: 2) ifTrue: [ ind2 := e].
 	].
-
-   Transcript show: 'ind1 est ', ind1; cr.
-   Transcript show: 'ind2 est ', ind2; cr.
 	
-	(board at: ind1) at: ind2 put: value
+	(board at: ind1) at: ind2 put: value.
 ]
 
 { #category : 'accessing' }
@@ -59,7 +57,22 @@ MyFENBoard >> initialize [
 	
 	board := OrderedCollection new.
 	
-	1 to: 8 do:[:e| board add: (OrderedCollection new:8)].
+	1 to: 8 do:[:e| 
+		board add: OrderedCollection new. 
+		1 to: 8 do:[:u|
+			(board at: e) add: nil. 
+		]
+	].
+]
+
+{ #category : 'accessing' }
+MyFENBoard >> isPlayerWhite [
+	^ isPlayerWhite.
+]
+
+{ #category : 'accessing' }
+MyFENBoard >> isPlayerWhite: value [
+	isPlayerWhite := value.
 ]
 
 { #category : 'accessing' }
