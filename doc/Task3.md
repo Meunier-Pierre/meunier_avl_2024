@@ -114,8 +114,8 @@ n'étant pas indispensable pour les testsOracle. On trouvera peut-être plus de 
 
 J'ai choisis de créer la classe MyFENOracle:     
 	- Qui teste une classe ayant les fonctions "fromFENString: aString", "board" et "currentPlayer"   
-	- Pour une chaine FEN donné renvoit nil si la réponse de la classe est conforme au testOracle, une chaine de caractere   
-	      décrivant l'erreur sinon.   
+	- Pour une chaine FEN donné lance une erreur décrivant pourquoi le test n'est pas conforme au testOracle, ou ne ne leve     
+			pas d'erreur si tout est bon.     
 	- Le test Oracle implémenté est un testDifférentiel, en gros MyFENOracle parse la chaine, et compare le résultat qu'elle génère 
 			à celui fourni par la classe testé.    
 	- Les seuls tests effectués actuellement sont "Couleur joueur courant" "Couleur des pièces" "Id des pièces"    
@@ -133,10 +133,9 @@ fuzzer := MyFENFuzzer new.
 oracle := MyFENOracle new.
 oracle testedClass: MyChessGame.
 
-r := PzBlockRunner on: [ str | oracle realizeTest: str ].
-r successWith: nil.
+r := PzBlockRunner on: [ :str |  (oracle realizeTest: str) ].
 
-fuzzer run: r times: 1. 
+fuzzer run: r times: 2. 
 ```
 
 ----------------
@@ -159,18 +158,9 @@ oracle numberToSpace: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.
 
 -----------
 
-**TO DO:** Actuel board les fonctions sont bonnes + pour l'oracle numberToSpace j'ai vérifié et cela fonctionne.    
-              On peut commencer le parsage.        
-**TO DO:** Idée crée une classe qui parse, et comparer. Mais à voir en fonction de bah... comment on appelle le parsage.   
-**TO DO:** Regarder mon test en task2 > Hum... au Game je peux rendre CurrentPlayer public   
-
---- Moyen Technique: On prend un game, et on demande le joueur courant  + on demande couleur et id de chaque piece ---
----         Oracle = deviné par la classe par parsage genre test différentiel  ------------- 
------        Moyen tester > On a PzRunner qui a failureWith: sucessWith: donc moi faire une classe qui renvoit true / false ----------
-----                    Et indiquer failure si je renvoie false   ------------
-
-**TO DO:** Voir quelle methode on appelle   
-**TO DO:** Voir le type d'objet retourné et ce que je peux tester    
+**TO DO:** Bon on va changer pour en cas d'erreur du levage d'erreur (et non d'exception) avec "(Error new messageText: 'a') signal."     
+**TO DO:**   Juste coder "realizeTest: aString" car pour le reste mon board est testé, et idem la fonction qui convertie les nombres en espace
+              est testée     
 
 ## Fuzzer : Mutation Testing   
 
