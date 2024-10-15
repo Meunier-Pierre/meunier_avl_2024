@@ -34,6 +34,13 @@ MyFENOracle >> numberToSpace: aString [
     
 ]
 
+{ #category : 'testing' }
+MyFENOracle >> realizeTest: FENString [
+	"comment stating purpose of instance-side method"
+	
+	(Error new messageText: 'a') signal.
+]
+
 { #category : 'accessing' }
 MyFENOracle >> testedClass: aGame [
 	
