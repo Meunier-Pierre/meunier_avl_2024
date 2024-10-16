@@ -93,7 +93,7 @@ fuzz
 
    part1 := self FENspaceToNumber: part1.
    part2 := #('w' 'b') atRandom.
-   part3 := #('KQkq' 'KQk' 'Qk' '' 'kQK') atRandom.
+   part3 := #('KQkq' 'KQk' 'Qk' '-' 'kQK') atRandom.
    part4 := #('-' '-' '-' '-' '-' '-' '-' '-' 'a3' 'c3' 'f3' 'h3' 'b6' 'd6' 'g6') atRandom.
    i := (0 to: 70) atRandom.
    part5 := ((0 to: i) atRandom) asString.
@@ -148,16 +148,24 @@ board idAt: 'c4'.
 board isWhiteAt: 'c4'.
 ```
 
-test de number to Space 
+test de number to Space  >>
 
 ```
 oracle := MyFENOracle new.
 oracle numberToSpace: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.
 ```
 
+test de l'oracle / la classe Game sur configuration départ
+```
+oracle := MyFENOracle new.
+oracle testedClass: MyChessGame.
+oracle realizeTest: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'.
+
+```
 
 -----------
 
+**TO DO:** Compare couleur piece + compare id piece
 **TO DO:** Bon on va changer pour en cas d'erreur du levage d'erreur (et non d'exception) avec "(Error new messageText: 'a') signal."     
 **TO DO:**   Juste coder "realizeTest: aString" car pour le reste mon board est testé, et idem la fonction qui convertie les nombres en espace
               est testée     
