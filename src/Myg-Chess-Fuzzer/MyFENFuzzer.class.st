@@ -56,7 +56,7 @@ MyFENFuzzer >> fuzz [
 
    part1 := self FENspaceToNumber: part1.
    part2 := #('w' 'b') atRandom.
-   part3 := #('KQkq' 'KQk' 'Qk' '' 'kQK') atRandom.
+   part3 := #('KQkq' 'KQk' 'Qk' '-' 'kQK') atRandom.
    part4 := #('-' '-' '-' '-' '-' '-' '-' '-' 'a3' 'c3' 'f3' 'h3' 'b6' 'd6' 'g6') atRandom.
    i := (0 to: 70) atRandom.
    part5 := ((0 to: i) atRandom) asString.
