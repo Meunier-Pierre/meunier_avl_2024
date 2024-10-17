@@ -199,6 +199,23 @@ r := PzBlockRunner on: [ :str |  (oracle realizeTest: str) ].
 fuzzer run: r times: 100. 
 ```
 
+## Second résultats         
+
+Après test avec la nouvelle grammaire, j'obtiens 9% de succes.   
+
+Je me suis cependant demandé pourquoi j'obtenais autant d'échec, et je me suis dit que j'allais remplacer les parties 3 et    
+4 de chaines comme "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" par "-" afin de faciliter le travail du parser...   
+
+Mal m'en à pris, je suis tombé à 0% de succès.    
+Donc j'ai fais quelques tests en modifiant ma grammaire. Et j'ai découverts les erreurs suivantes:    
+- Pour la partie 3 de la chaine il faut que celle ci soit "KQkq", et non pas "KQk" "Qk" "-" "kQK" ou l'on recoit les   
+Exceptions "Expected one of #($k $K $q $Q)" ou "Assertion failed".       
+- Pour la partie 4 de la chaine, il faut que celle-ci soit à "-", et non pas "a3" "c3" "f3" "h3" ou l'on recoit l'exception    
+"Expected one of (3 to: 6)"     
+
+J'ai maintenant modifié la classe MyFENSimpleFuzzer pour toujours envoyer "KQkq" et "-", en plus d'avoir uniquement des lignes   
+100% vides, 100% pleines, et donc maintenant j'obtiens un taux de succès de 100% avec mon Fuzzer.   
+
 
 ## Fuzzer : Mutation Testing   
 
