@@ -1,6 +1,15 @@
 
 # Task 3: fuzzing, oracles and property based testing    
 
+## Sommaire   
+
+[Presentation des strings FEN](#presentation-des-strings-fen)        
+[Fuzzer : Implementation de la grammaire](#fuzzer--implementation-de-la-grammaire)      
+[Test Oracle](#test-oracle)      
+[Premiers résultats](#premiers-résultats)     
+[Fuzzer : Besoin d'une nouvelle Grammaire](#fuzzer--besoin-dune-nouvelle-grammaire)     
+[Fuzzer : Mutation Testing](#fuzzer--mutation-testing)      
+[Resultats](#resultats)     
 
   
 ## Presentation des strings FEN  
@@ -44,23 +53,23 @@ L'on écrit b pour dire que cela est le tour du joueur Black / Noir.
 
 La grammaire étant très particulière, j'ai préféré faire ma propre classe pour implementer ma grammaire, plutôt    
 qu'étendre GncBaseGrammar. Sinon il était par exemple dur de limiter à 2 fous noir, ou de garder 8 cases par rangées   
-lorsque l'on mele nombre de cases vides et pieces.  
+lorsque l'on mele nombre de cases vides et pieces.    
 
 Il me fallait cependant étendre un Fuzzer pour utiliser les méthodes habituels des Fuzzer, et des Runners.      
-J'ai utilisé le code suivant pour créer une classe MyFENFuzzer en package "Myg-Chess-Fuzzer" , puis après j'ai  
-défini la méthode fuzz de ma classe.         
-
-```
-PzFuzzer subclass: #MyFENFuzzer 
-   instanceVariableNames: ''
-	classVariableNames: ''
-	package: 'Myg-Chess-Fuzzer'.
-```
+J'ai donc crée une classe MyFENFuzzer en package "Myg-Chess-Fuzzer" , puis après j'ai défini la méthode fuzz de ma   
+classe.         
 
 L'idée simple de ma méthode fuzz pour générer la 1er partie de la string qui est la plus dure est:   
 - L'on remplace les espace par des nombres après, et non au début    
 - L'on ajoute des pièces tant qu'il reste des exemplaires de cette pièce     
 - Le caractère ' ' est aussi compté comme une pièce    
+
+L'on peut tester le fuzzer avec   
+
+```
+fuzzer := MyFENFuzzer new.
+fuzzer fuzz.
+```
 
 Le code de la méthode fuzz est le suivant. Notons que j'ai aussi crée une méthode "FENspaceToNumber: aString"   
 qui remplace les espace par des nombres, mais son code étant plus simple je ne montre pas spécifiquement son code.            
@@ -115,14 +124,12 @@ n'étant pas indispensable pour les testsOracle. On trouvera peut-être plus de 
 J'ai choisis de créer la classe MyFENOracle:     
 	- Qui teste une classe ayant les fonctions "fromFENString: aString", "board" et "currentPlayer"   
 	- Pour une chaine FEN donné lance une erreur décrivant pourquoi le test n'est pas conforme au testOracle, ou ne ne leve     
-			pas d'erreur si tout est bon.     
-	- Le test Oracle implémenté est un testDifférentiel, en gros MyFENOracle parse la chaine, et compare le résultat qu'elle génère 
-			à celui fourni par la classe testé.    
-	- Les seuls tests effectués actuellement sont "Couleur joueur courant" "Couleur des pièces" "Id des pièces"    
-    - Pour la 1er version du test Oracle je vais y aller gentillement. On n'a pas encore de mutation. Je vais parser, en considérant    
-	       que la chaine donnée est forcément correcte pour simplifier le code.    
+			pas d'erreur si le résultat est celui attendu.     
+	- L' Oracle implémenté est un test Différentiel. La classe MyFENOracle parse la chaine, et compare le résultat qu'elle     
+	        génère à celui fourni par la classe testé.    
+	- Les tests effectués sont "Couleur joueur courant" "Couleur des pièces" "Id des pièces"      
 
-En interne, pour faciliter les tests j'ai aussi créer une classe "MyFENBoard" qui comprend des messages comme "a4", et peut répondre   
+En interne, pour faciliter les tests j'ai aussi crée une classe "MyFENBoard" qui comprend des messages comme "a4", et peut répondre   
 par l'id de sa pièce, ou sa couleur.    
 
 
@@ -135,40 +142,63 @@ oracle testedClass: MyChessGame.
 
 r := PzBlockRunner on: [ :str |  (oracle realizeTest: str) ].
 
-fuzzer run: r times: 2. 
+fuzzer run: r times: 100. 
 ```
 
-----------------
-test du board >>
+L'implémentation de la fonction realizeTest de l'Oracle comprend 50 lignes.    
+Vous pouvez allez voir le code de "MyFENOracle >> realizeTest: aFENString" via l'IDE pharo si vous le souhaitez.    
+
+
+## Premiers résultats     
+
+Les premiers résultats ont été assez rapides. Sur 100 FEN au hasard, 100 étaient en echec.    
+Je savais pourtant par mes tests unitaires que 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' était bien parsé.    
+J'ai fais quelques vérification manuelles, en partant de cette chaine sans echec.   
+
+Et j'ai pu remarquer l'erreur suivante dans le programme testé:   
+- Si une ligne à parser n'est pas soit 100% remplis, soit 100% vide, la classe testée crashe avec "Collections sizes do not match"  
+ou "Instance of Character did not understand #substring". Un soucis pour parser les nombres.           
+
+J'ai vérifié cela avec les commandes suivantes, l'on fait parser une chaine au programme testé, et l'on affiche le résultat sans  
+Oracle. La deuxième commande crash, car 2 pions ont été remplacés par 2 espaces.   
 
 ```
-board := MyFENBoard new.
-board at: 'c4' put: $Q.
-board idAt: 'c4'.
-board isWhiteAt: 'c4'.
+MyChessGame fromFENString: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'.
 ```
 
-test de number to Space  >>
-
 ```
-oracle := MyFENOracle new.
-oracle numberToSpace: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'.
+MyChessGame fromFENString: 'rnbqkbnr/pp2pppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'.
 ```
 
-test de l'oracle / la classe Game sur configuration départ
+## Fuzzer : Besoin d'une nouvelle Grammaire   
+
+Après le 1er test ou le Fuzzer a eu 100% de crash, il me fallait réaliser une grammaire spécifiquement faire pour éviter ce   
+bug déjà connu. Et découvrir de nouveaux bugs. J'ai fais une nouvelle classe MyFENSimpleFuzzer, redéfinissant la méthode fuzz.   
+
+Le principe est simple:    
+- Generation de 8 lignes aleatoires   
+- La ligne contient soit 8 pieces, soit est '8'    
+
+L'on peut vérifier le bon fonctionnement de ce fuzzer, en affichant les chaines générées.    
+
 ```
+fuzzer := MyFENSimpleFuzzer new.
+fuzzer fuzz.
+```
+
+Et l'on obtient un nouveau testOracle.    
+Je l'ai testé, et j'obtiens 9% de succès avec celui ci.     
+
+```
+fuzzer := MyFENSimpleFuzzer new.
 oracle := MyFENOracle new.
 oracle testedClass: MyChessGame.
-oracle realizeTest: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'.
 
+r := PzBlockRunner on: [ :str |  (oracle realizeTest: str) ].
+
+fuzzer run: r times: 100. 
 ```
 
------------
-
-**TO DO:** Compare couleur piece + compare id piece
-**TO DO:** Bon on va changer pour en cas d'erreur du levage d'erreur (et non d'exception) avec "(Error new messageText: 'a') signal."     
-**TO DO:**   Juste coder "realizeTest: aString" car pour le reste mon board est testé, et idem la fonction qui convertie les nombres en espace
-              est testée     
 
 ## Fuzzer : Mutation Testing   
 
