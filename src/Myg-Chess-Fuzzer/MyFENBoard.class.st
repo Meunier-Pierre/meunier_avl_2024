@@ -47,7 +47,7 @@ MyFENBoard >> idAt: pos [
 	].
 	
 	tmp := (board at: ind1) at: ind2.
-	tmp = (' ' at: 1) ifTrue: [^ nil] ifFalse: [ ^ tmp asLowercase ].
+	tmp = (' ' at: 1) ifTrue: [^ nil] ifFalse: [ ^ tmp asUppercase asString ].
 	
 ]
 
