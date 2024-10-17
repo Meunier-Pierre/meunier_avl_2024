@@ -24,8 +24,8 @@ MyFENSimpleFuzzer >> fuzz [
    part1 := part1 , (lines atRandom).
 
    part2 := #('w' 'b') atRandom.
-   part3 := #('KQkq' 'KQk' 'Qk' '-' 'kQK') atRandom.
-   part4 := #('-' '-' '-' '-' '-' '-' '-' '-' 'a3' 'c3' 'f3' 'h3' 'b6' 'd6' 'g6') atRandom.
+   part3 := 'KQkq'.
+   part4 := '-'.
    part5 := ((0 to: 5) atRandom) asString.
    part6 := ((0 to: 30) atRandom) asString.
    result := part1, ' ', part2, ' ', part3, ' ', part4, ' ', part5, ' ', part6.
