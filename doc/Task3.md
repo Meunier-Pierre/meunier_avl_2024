@@ -274,6 +274,7 @@ types de pièces parsés, ou la couleur des pièces parsés étaient corrects. M
 incorrects, j'ai donc trouvé les erreurs suivantes.     
 
 Pour rappel une chaine FEN correct est    
+     
 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1    
 
 Liste d'erreur:    
