@@ -259,7 +259,7 @@ mutationFuzzer run: r times: 100.
 ## Troisième résultats         
 
 Lors du test de mutation fuzzing, j'ai fait exprès d'envoyer 100% de chaines incorrectes, et pourtant j'ai environ 25% de chaines   
-parsés qui ou aucune erreur n'est déclenchée. Ce qui est une erreur.     
+parsés pour lesquelles aucune erreur n'est déclenchée. Ce qui est incorrect.        
      
 Après plus d'analyse, j'ai trouvé le bug suivant:     
 - Si l'on envoie une chaine FEN qui contient 7 champs au lieu de 6, la chaine est interprétée alors que celle ci est incorrecte   
