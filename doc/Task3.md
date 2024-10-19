@@ -181,7 +181,7 @@ mais qui évitera le bug repéré.
 Le principe est simple:    
 - Generation de 8 lignes aleatoires   
 - La ligne contient soit 8 pieces, soit est '8'    
-- Ainsi, l'on peut éviter de déclencher le bug déjà connu du parser   
+- Ainsi, l'on peut éviter de déclencher le bug déjà connu de la classe testée   
 
 L'on peut vérifier le bon fonctionnement de ce fuzzer, en affichant les chaines générées.    
 
