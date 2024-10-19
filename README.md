@@ -22,9 +22,9 @@ https://github.com/avl-univ-lille/testing/blob/2024/tp.md
 
 Les réponses aux Tasks sont écrites dans ces fichiers     
       
-[doc/Task1.md](./doc/Task1.md)  
-[doc/Task2.md](./doc/Task2.md)  
-[doc/Task3.md](./doc/Task3.md)  
+[doc/Task1.md](./doc/Task1.md)    
+[doc/Task2.md](./doc/Task2.md)    
+[doc/Task3.md](./doc/Task3.md)    
 
 
 # Import du projet     

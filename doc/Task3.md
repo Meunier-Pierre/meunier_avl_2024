@@ -7,9 +7,11 @@
 [Fuzzer : Implementation de la grammaire](#fuzzer--implementation-de-la-grammaire)      
 [Test Oracle](#test-oracle)      
 [Premiers résultats](#premiers-résultats)     
-[Fuzzer : Besoin d'une nouvelle Grammaire](#fuzzer--besoin-dune-nouvelle-grammaire)     
-[Fuzzer : Mutation Testing](#fuzzer--mutation-testing)      
-[Resultats](#resultats)     
+[Fuzzer : Besoin d'une nouvelle Grammaire](#fuzzer--besoin-dune-nouvelle-grammaire)    
+[Second résultats](#second-résultats)       
+[Fuzzer : Mutation Testing](#fuzzer--mutation-testing)   
+[Troisième résultats](#troisième-résultats)   
+[Resultats finaux](#resultats-finaux)     
 
   
 ## Presentation des strings FEN  
@@ -172,12 +174,14 @@ MyChessGame fromFENString: 'rnbqkbnr/pp2pppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 
 
 ## Fuzzer : Besoin d'une nouvelle Grammaire   
 
-Après le 1er test ou le Fuzzer a eu 100% de crash, il me fallait réaliser une grammaire spécifiquement faire pour éviter ce   
-bug déjà connu. Et découvrir de nouveaux bugs. J'ai fais une nouvelle classe MyFENSimpleFuzzer, redéfinissant la méthode fuzz.   
+Après le 1er test ùu le Fuzzer a eu 100% de crash, il me fallait réaliser une grammaire spécifiquement faire pour éviter ce   
+bug déjà connu. Et découvrir de nouveaux bugs. J'ai fais une nouvelle classe MyFENSimpleFuzzer, redéfinissant la méthode fuzz,    
+mais qui évitera le bug repéré.       
 
 Le principe est simple:    
 - Generation de 8 lignes aleatoires   
 - La ligne contient soit 8 pieces, soit est '8'    
+- Ainsi, l'on peut éviter de déclencher le bug déjà connu du parser   
 
 L'on peut vérifier le bon fonctionnement de ce fuzzer, en affichant les chaines générées.    
 
@@ -214,42 +218,66 @@ Exceptions "Expected one of #($k $K $q $Q)" ou "Assertion failed".
 "Expected one of (3 to: 6)"     
 
 J'ai maintenant modifié la classe MyFENSimpleFuzzer pour toujours envoyer "KQkq" et "-", en plus d'avoir uniquement des lignes   
-100% vides, 100% pleines, et donc maintenant j'obtiens un taux de succès de 100% avec mon Fuzzer.   
+100% vides, 100% pleines, et donc maintenant j'obtiens un taux de succès de 100% avec mon Fuzzer, sur 100 chaines. Je rappelle    
+que mon Test Oracle vérifie la couleur du joueur, l'id des pièces, et la couleur des pièces.      
 
 
 ## Fuzzer : Mutation Testing   
 
-Tout d'abord en mutation Fuzzing l'idée est de partir de valeurs correctes, afin de générer des ensembles de valeurs   
-mélangeant:      
-    - Des valeurs correctes mais différentes    
-	- Des valeurs incorrectes mais très légèrement incorrectes   
 
-L'idée étant que les valeurs "très correctes" ou "très incorrectes" sont souvent facilement testées. Et que l'on va ainsi    
-essayer d'être un peu au bord entre les deux. Pour trouver des valeurs donnant des résultats intéressants.    
+Généralement en Mutation Testing l'on souhaiterais générer des chaines correctes différentes, et des chaines incorrectes.   
+Cependant je dispose déjà de pas mal de résultats. Et j'ai pu voir que si j'utilise un test différentiel pour les chaines    
+ne provoquant pas de crash, j'ai 100% de réussite. En vérifiant couleur du joueur, type des pièces, couleurs des pièces.    
 
-J'ai regardé la classe PzFuzzer utilisée en Practise 4. D'après la Practise 4 du cours, l'on voit que pour faire du mutation   
-testing "naif" l'on utilise PzMutationFuzzer qui est une classe enfant de PzFuzzer. Classe qui redefini "fuzz" la méthode de   
-base des Fuzzer, et définie de nouvelles méthodes et attributs pour configurer la création des mutations.    
+Le parsage semble donc ok, si le programme testé ne crash pas. Je vais donc plutôt choisir de faire uniquement un "Test de   
+Crash" en mutation testing. En passant des valeurs impossible qui devrait logiquement crasher... mais ne le feront peut être   
+pas. Je vais donc changer mon Test Oracle de façon accordé par rapport à avant.    
 
-J'ai donc choisit de créer également ma propre classe étendant PzFuzzer. Et que cette classe prendrait donc en "graine"   
-un Fuzzer générant des chaines FEN correctes. En l'occurence ma classe FENFuzzer.  
-
-Hum... Il me faut donc un Fuzzer pouvant générer des chaines correctes et incorrectes.   
-
-**TODO:** AVANT de reprendre, créer le test Oracle. Raison: Permettra de tester si mon Fuzzer de Mutation trouve des valeurs intéressantes.
-**TODO:** Créer ma classe
-
-**TODO:** Idée Mutation -> Correct:  Créer une configuration Roque + indiquer roque possible
-**TODO:**               -> Correct: Créer une configuration "Comme Roque" + indiquer roque impossible
-**TODO:**               -> Borderline: Mettre en champ 5 ou 6 (nb tour) des valeurs négatives
-**TODO:**               -> Borderline: Echequier sans roi
-**TODO:**               -> Borderline: Remplacer 100% des pièces par des pièces noires
-**TODO:**               -> Correct: Switcher des pièces entre elles
-**TODO:**               -> Correct: Remplacer des pièces par des nombres quitte à avoir des nombres qui se suivent
-**TODO:**               -> Incorrect: Indiquer en champ 2 3 ou 4 des lettres impossibles
-**TODO:**               -> Incorrect: Moins de champ, ou plus de champ qu'attendu
+Mon test Oracle sera juste "Vérifier si cela crash bien". Je vais Utiliser les PzRunner de base, et considérer que "SUCESS"   
+est équivalent à "FAILURE".         
 
 
-# Resultats
+Les mutations que je choisis d'implémenter sont:   
+- Ajouter une pièce sur une ligne de façon à dépasser la limite normale. Uniquement sur une ligne non vide.   
+- Ajouter un 7éme champ    
+- Enlever le dernier champ   
+- Remplacer une pièce par "a"   
 
-**TODO:** Pour rappel on doit trouver des bugs
+J'implémente le mutation fuzzing via ma classe MyFENMutationFuzzer qui redéfini PzFuzzer. Et qui défini les méthodes "fuzz" et     
+"seed: aCorpus". La facon de réaliser les tests est la suivante. Mais attention, pour rappel on va attendre un crash. Et non    
+une réussite.   
+
+```
+fuzzer := MyFENSimpleFuzzer new.
+corpus := (1 to: 100) collect: [:e | fuzzer fuzz].
+
+mutationFuzzer := MyFENMutationFuzzer new.
+mutationFuzzer seed: corpus.
+
+r := PzBlockRunner on: [ :e | MyChessGame fromFENString: e ].
+mutationFuzzer run: r times: 100.
+```
+
+## Troisième résultats         
+
+Après test de mutation fuzzing, j'ai fait exprès d'envoyer 100% de chaines incorrectes, et pourtant j'ai environ 25% de chaines   
+parsés qui ne crashent pas. Cela devrait vouloir dire que un de mes cas n'est pas rejeté. APrès plus d'analyse, je trouve en 
+supplémentaire le bug suivant:     
+- Si l'on envoie une chaine FEN qui contient 7 champs au lieu de 6, la chaine est interprétée alors que celle ci est incorrecte   
+
+
+# Resultats finaux
+
+En conclusion, un total de 4 erreurs ont été repérées.    
+A mon grand regret, le choix d'un Test Différentiel en Test Oracle au début n'a pas été payant. Car les couleurs du joueur, les    
+types de pièces parsés, ou la couleur des pièces parsés étaient corrects. Mais en alternant envoie de chaines corrects et   
+in corrects, j'ai donc trouvé les erreurs suivantes.     
+
+Liste d'erreur:    
+- Si une ligne à parser n'est pas soit 100% remplis, soit 100% vide, la classe testée crashe avec "Collections sizes do not match"  
+ou "Instance of Character did not understand #substring". Un soucis pour parser les nombres.  
+- Pour la partie 3 de la chaine il faut que celle ci soit "KQkq", et non pas "KQk" "Qk" "-" "kQK" ou l'on recoit les   
+Exceptions "Expected one of #($k $K $q $Q)" ou "Assertion failed".       
+- Pour la partie 4 de la chaine, il faut que celle-ci soit à "-", et non pas "a3" "c3" "f3" "h3" ou l'on recoit l'exception    
+"Expected one of (3 to: 6)"     
+- Si l'on envoie une chaine FEN qui contient 7 champs au lieu de 6, la chaine est interprétée alors que celle ci est incorrecte   
