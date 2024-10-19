@@ -273,6 +273,9 @@ A mon grand regret, le choix d'un Test Différentiel en Test Oracle au début n'
 types de pièces parsés, ou la couleur des pièces parsés étaient corrects. Mais en alternant envoie de chaines corrects et   
 incorrects, j'ai donc trouvé les erreurs suivantes.     
 
+Pour rappel une chaine FEN correct est    
+rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1    
+
 Liste d'erreur:    
 - Si une ligne de l'échequier n'est pas soit 100% remplis, soit 100% vide, la classe testée crashe avec "Collections sizes do not match"    
 ou "Instance of Character did not understand #substring".              
