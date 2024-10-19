@@ -6,11 +6,11 @@
 [Presentation des strings FEN](#presentation-des-strings-fen)        
 [Fuzzer : Implementation de la grammaire](#fuzzer--implementation-de-la-grammaire)      
 [Test Oracle](#test-oracle)      
-[Premiers résultats](#premiers-résultats)     
+[Premier résultat](#premier-résultat)     
 [Fuzzer : Besoin d'une nouvelle Grammaire](#fuzzer--besoin-dune-nouvelle-grammaire)    
-[Second résultats](#second-résultats)       
+[Second résultat](#second-résultat)       
 [Fuzzer : Mutation Testing](#fuzzer--mutation-testing)   
-[Troisième résultats](#troisième-résultats)   
+[Troisième résultat](#troisième-résultat)   
 [Resultats finaux](#resultats-finaux)     
 
   
@@ -151,7 +151,7 @@ L'implémentation de la fonction realizeTest de l'Oracle comprend 50 lignes.
 Vous pouvez allez voir le code de "MyFENOracle >> realizeTest: aFENString" via l'IDE pharo si vous le souhaitez.    
 
 
-## Premiers résultats     
+## Premier résultat     
 
 Les premiers résultats ont été assez rapides. Sur 100 FEN au hasard, 100 étaient en echec.    
 Je savais pourtant par mes tests unitaires que 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' était bien parsé.    
@@ -203,7 +203,7 @@ r := PzBlockRunner on: [ :str |  (oracle realizeTest: str) ].
 fuzzer run: r times: 100. 
 ```
 
-## Second résultats         
+## Second résultat         
 
 Après test avec la nouvelle grammaire, j'obtiens 9% de succes.   
 
@@ -256,7 +256,7 @@ r := PzBlockRunner on: [ :e | MyChessGame fromFENString: e ].
 mutationFuzzer run: r times: 100.
 ```
 
-## Troisième résultats         
+## Troisième résultat         
 
 Lors du test de mutation fuzzing, j'ai fait exprès d'envoyer 100% de chaines incorrectes, et pourtant j'ai environ 25% de chaines   
 parsés pour lesquelles aucune erreur n'est déclenchée. Ce qui est incorrect.        
