@@ -271,7 +271,7 @@ En conclusion, un total de 4 erreurs ont été repérées.
       
 A mon grand regret, le choix d'un Test Différentiel en Test Oracle au début n'a pas été payant. Car les couleurs du joueur, les    
 types de pièces parsés, ou la couleur des pièces parsés étaient corrects. Mais en alternant envoie de chaines corrects et   
-in corrects, j'ai donc trouvé les erreurs suivantes.     
+incorrects, j'ai donc trouvé les erreurs suivantes.     
 
 Liste d'erreur:    
 - Si une ligne à parser n'est pas soit 100% remplis, soit 100% vide, la classe testée crashe avec "Collections sizes do not match"  
