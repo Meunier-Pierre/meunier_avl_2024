@@ -277,7 +277,7 @@ Pour rappel une chaine FEN correct est
      
 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1    
 
-Liste d'erreur:    
+**Liste d'erreur:**    
 - Si une ligne de l'échequier n'est pas soit 100% remplis, soit 100% vide, la classe testée crashe avec "Collections sizes do not match"    
 ou "Instance of Character did not understand #substring".              
 - Pour la partie 3 de la chaine il faut que celle ci soit "KQkq", et non pas "KQk" "Qk" "-" "kQK" ou l'on recoit les   
