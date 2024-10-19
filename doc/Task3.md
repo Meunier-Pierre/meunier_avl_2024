@@ -229,15 +229,13 @@ Généralement en Mutation Testing l'on souhaiterais générer des chaines corre
 Cependant je dispose déjà de pas mal de résultats. Et j'ai pu voir que si j'utilise un test différentiel pour les chaines    
 ne provoquant pas de crash, j'ai 100% de réussite. En vérifiant couleur du joueur, type des pièces, couleurs des pièces.    
 
-Le parsage semble donc ok, si le programme testé ne crash pas. Je vais donc plutôt choisir de faire uniquement un "Test de   
-Crash" en mutation testing. En passant des valeurs impossible qui devrait logiquement crasher... mais ne le feront peut être   
-pas. Je vais donc changer mon Test Oracle de façon accordé par rapport à avant.    
-
-Mon test Oracle sera juste "Vérifier si cela crash bien". Je vais Utiliser les PzRunner de base, et considérer que "SUCESS"   
-est équivalent à "FAILURE".         
+J'ai donc choisit finalement d'arreter de vérifier si le parsing est correct. Ce qu'il semble être. Et plutôt de me concentrer   
+sur les cas d'erreurs. Ma nouvelle idée va être d'envoyer des chaines légèrement incorrects, et de voir si un crash est détecté.   
+Mon test Oracle sera juste "Vérifier si cela crash bien". Je vais Utiliser PzBlockRunner, et considérer que rencontrer "SUCESS"   
+indique un échec.     
 
 
-Les mutations que je choisis d'implémenter sont:   
+Les mutations que j'ai choisis d'implémenter sont:   
 - Ajouter une pièce sur une ligne de façon à dépasser la limite normale. Uniquement sur une ligne non vide.   
 - Ajouter un 7éme champ    
 - Enlever le dernier champ   
@@ -260,15 +258,17 @@ mutationFuzzer run: r times: 100.
 
 ## Troisième résultats         
 
-Après test de mutation fuzzing, j'ai fait exprès d'envoyer 100% de chaines incorrectes, et pourtant j'ai environ 25% de chaines   
-parsés qui ne crashent pas. Cela devrait vouloir dire que un de mes cas n'est pas rejeté. APrès plus d'analyse, je trouve en 
-supplémentaire le bug suivant:     
+Lors du test de mutation fuzzing, j'ai fait exprès d'envoyer 100% de chaines incorrectes, et pourtant j'ai environ 25% de chaines   
+parsés qui ou aucune erreur n'est déclenchée. Ce qui est une erreur.     
+     
+Après plus d'analyse, j'ai trouvé le bug suivant:     
 - Si l'on envoie une chaine FEN qui contient 7 champs au lieu de 6, la chaine est interprétée alors que celle ci est incorrecte   
 
 
 # Resultats finaux
 
-En conclusion, un total de 4 erreurs ont été repérées.    
+En conclusion, un total de 4 erreurs ont été repérées.   
+      
 A mon grand regret, le choix d'un Test Différentiel en Test Oracle au début n'a pas été payant. Car les couleurs du joueur, les    
 types de pièces parsés, ou la couleur des pièces parsés étaient corrects. Mais en alternant envoie de chaines corrects et   
 in corrects, j'ai donc trouvé les erreurs suivantes.     
