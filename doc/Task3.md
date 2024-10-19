@@ -159,7 +159,7 @@ J'ai fais quelques vérification manuelles, en partant de cette chaine sans eche
 
 Et j'ai pu remarquer l'erreur suivante dans le programme testé:   
 - Si une ligne de l'échequier n'est pas soit 100% remplis, soit 100% vide, la classe testée crashe avec "Collections sizes do not match"    
-ou "Instance of Character did not understand #substring". Il y a un soucis pour parser les nombres.           
+ou "Instance of Character did not understand #substring".              
 
 J'ai vérifié cela avec les commandes suivantes, l'on fait parser une chaine au programme testé, et l'on affiche le résultat sans  
 Oracle. La deuxième commande crash, car 2 pions ont été remplacés par 2 espaces.   
@@ -275,7 +275,7 @@ incorrects, j'ai donc trouvé les erreurs suivantes.
 
 Liste d'erreur:    
 - Si une ligne de l'échequier n'est pas soit 100% remplis, soit 100% vide, la classe testée crashe avec "Collections sizes do not match"    
-ou "Instance of Character did not understand #substring". Il y a un soucis pour parser les nombres.           
+ou "Instance of Character did not understand #substring".              
 - Pour la partie 3 de la chaine il faut que celle ci soit "KQkq", et non pas "KQk" "Qk" "-" "kQK" ou l'on recoit les   
 Exceptions "Expected one of #($k $K $q $Q)" ou "Assertion failed".       
 - Pour la partie 4 de la chaine, il faut que celle-ci soit à "-", et non pas "a3" "c3" "f3" "h3" ou l'on recoit l'exception    
