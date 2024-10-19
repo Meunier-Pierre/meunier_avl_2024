@@ -174,7 +174,7 @@ MyChessGame fromFENString: 'rnbqkbnr/pp2pppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 
 
 ## Fuzzer : Besoin d'une nouvelle Grammaire   
 
-Après le 1er test où le Fuzzer a eu 100% de crash, il me fallait réaliser une grammaire spécifiquement faire pour éviter ce   
+Après le 1er test où le programme testé a eu 100% de crash, il me fallait réaliser une grammaire spécifiquement faire pour éviter ce   
 bug déjà connu. Et découvrir de nouveaux bugs. J'ai fais une nouvelle classe MyFENSimpleFuzzer, redéfinissant la méthode fuzz,    
 mais qui évitera le bug repéré.       
 
